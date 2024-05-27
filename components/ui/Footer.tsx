@@ -3,7 +3,7 @@ import SupabaseLogo from "../SupabaseLogo";
 
 export default function Footer() {
   return (
-    <footer className="w-full border-t border-t-foreground/10 p-4 flex justify-evenly text-center text-xs">
+    <footer className="w-full max-w-4xl border-t border-t-foreground/10 p-4 flex justify-evenly text-center text-xs">
       <div className="flex flex-col justify-center">
         <p className="font-bold text-xl">
           <span className="text-gray-400">Kip</span>
