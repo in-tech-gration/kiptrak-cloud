@@ -1,21 +1,10 @@
-"use client";
+import ProgressGrid from "./ProgressGrid";
 
-import { createClient } from "@/utils/supabase/client";
-import { useEffect, useState } from "react";
-
-export default function Page() {
-  const [progress, setProgress] = useState<any[] | null>(null);
-  const supabase = createClient();
-
-  useEffect(() => {
-    const getData = async () => {
-      const { data: progressDraft } = await supabase
-        .from("progress_draft")
-        .select();
-      setProgress(progressDraft);
-    };
-    getData();
-  }, []);
-
-  return <pre>{JSON.stringify(progress, null, 2)}</pre>;
+export default function ProgressPage() {
+  return (
+    <div className="flex-1 w-full flex flex-col gap-20 justify-center items-center">
+      {/* TODO: Add a course entity to database in order to make this dynamic */}
+      <ProgressGrid courseTitle="WDX-180" numOfWeeks={36} />
+    </div>
+  );
 }
