@@ -2,6 +2,7 @@
 
 import { parseProgressParams } from "@/lib/parsers";
 import { createClient } from "@/utils/supabase/client";
+import { ProgressDraft } from "@/utils/supabase/types";
 import { type User } from "@supabase/supabase-js";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -16,7 +17,7 @@ export default function ProgressDashboard(props: ProgressDashboardProps) {
   );
   const supabase = createClient();
 
-  const [progressData, setProgressData] = useState<any[] | null>(null);
+  const [progressData, setProgressData] = useState<ProgressDraft[] | null>(null);
 
   useEffect(() => {
     const getData = async () => {
