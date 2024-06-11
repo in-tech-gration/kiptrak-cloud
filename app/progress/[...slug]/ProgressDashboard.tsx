@@ -1,11 +1,12 @@
 "use client";
 
-import { parseProgressParams } from "@/lib/parsers";
-import { createClient } from "@/utils/supabase/client";
-import { ProgressDraft } from "@/utils/supabase/types";
-import { type User } from "@supabase/supabase-js";
 import { useParams } from "next/navigation";
+import { useSupabase } from "@/hooks/useSupabase";
+import { type User } from "@supabase/supabase-js";
 import React, { useEffect, useState } from "react";
+import { parseProgressParams } from "@/lib/parsers";
+import { ProgressDraft } from "@/utils/supabase/types";
+import { getProgressDraft } from "@/utils/api-requests";
 
 type ProgressDashboardProps = {
   user: User;
@@ -15,29 +16,19 @@ export default function ProgressDashboard(props: ProgressDashboardProps) {
   const { week, day } = parseProgressParams(
     useParams<{ slug: string[] }>().slug
   );
-  const supabase = createClient();
 
-  const [progressData, setProgressData] = useState<ProgressDraft[] | null>(null);
+  const client = useSupabase();
+
+  const [progressData, setProgressData] = useState<ProgressDraft[] | null>(
+    null
+  );
 
   useEffect(() => {
-    const getData = async () => {
-      if (day) {
-        const { data: progress } = await supabase
-          .from("progress_draft")
-          .select()
-          .eq("week", week)
-          .eq("day", day);
-        setProgressData(progress);
-      } else {
-        const { data: progress } = await supabase
-          .from("progress_draft")
-          .select()
-          .eq("week", week);
-        setProgressData(progress);
-      }
-    };
-
-    getData();
+    if (week) {
+      getProgressDraft(client, week, day)
+        .then((data) => setProgressData(data))
+        .catch((error) => console.log(error));
+    }
   }, [week, day]);
 
   return (
