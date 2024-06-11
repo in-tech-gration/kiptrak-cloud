@@ -8,6 +8,7 @@
   "dependencies": {
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
+    "@tanstack/react-query": "^5.40.1",
     "autoprefixer": "10.4.17",
     "better-supabase-types": "^2.7.5",
     "geist": "^1.2.1",
@@ -19,6 +20,8 @@
     "typescript": "5.3.3"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.43.1",
+    "@tanstack/react-query-devtools": "^5.40.1",
     "@types/node": "20.11.5",
     "@types/react": "18.2.48",
     "@types/react-dom": "18.2.18",

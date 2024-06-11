@@ -1,12 +1,10 @@
 "use client";
 
+import React from "react";
 import { useParams } from "next/navigation";
-import { useSupabase } from "@/hooks/useSupabase";
 import { type User } from "@supabase/supabase-js";
-import React, { useEffect, useState } from "react";
 import { parseProgressParams } from "@/lib/parsers";
-import { ProgressDraft } from "@/utils/supabase/types";
-import { getProgressDraft } from "@/utils/api-requests";
+import { useProgressDraftQuery } from "@/hooks/useProgressDraftQuery";
 
 type ProgressDashboardProps = {
   user: User;
@@ -17,19 +15,19 @@ export default function ProgressDashboard(props: ProgressDashboardProps) {
     useParams<{ slug: string[] }>().slug
   );
 
-  const client = useSupabase();
+  const {
+    data: progressDrafts,
+    isLoading,
+    isError,
+  } = useProgressDraftQuery(week, day);
 
-  const [progressData, setProgressData] = useState<ProgressDraft[] | null>(
-    null
-  );
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  useEffect(() => {
-    if (week) {
-      getProgressDraft(client, week, day)
-        .then((data) => setProgressData(data))
-        .catch((error) => console.log(error));
-    }
-  }, [week, day]);
+  if (isError || !progressDrafts) {
+    return <div>Supabase Error</div>;
+  }
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 justify-center items-center">
@@ -46,7 +44,7 @@ export default function ProgressDashboard(props: ProgressDashboardProps) {
             <h2 className="text-3xl text-gray-400">Week: {week}</h2>
           )}
           <div>
-            {progressData?.length ? (
+            {progressDrafts?.length ? (
               <table>
                 <thead>
                   <tr>
@@ -60,7 +58,7 @@ export default function ProgressDashboard(props: ProgressDashboardProps) {
                   </tr>
                 </thead>
                 <tbody>
-                  {progressData?.map((progress, idx) => (
+                  {progressDrafts?.map((progress, idx) => (
                     <tr key={`p_${idx}`}>
                       <th>{progress.day}</th>
                       <th>{progress.concept}</th>

@@ -3,10 +3,10 @@ import { Progress, ProgressDraft } from "./supabase/types";
 
 export const getProgressDraft = async (
   client: TypedSupabaseClient,
-  week: number,
+  week?: number,
   day?: number
 ) => {
-  if (day) {
+  if (week && day) {
     const { data: progress } = (await client
       .from("progress_draft")
       .select()
@@ -15,7 +15,7 @@ export const getProgressDraft = async (
       .throwOnError()) as { data: ProgressDraft[] };
 
     return progress;
-  } else {
+  } else if (week) {
     const { data: progress } = (await client
       .from("progress_draft")
       .select()
@@ -23,15 +23,17 @@ export const getProgressDraft = async (
       .throwOnError()) as { data: ProgressDraft[] };
 
     return progress;
+  } else {
+    return []; // return empty array if no week and day numbers were given
   }
 };
 
 export const getProgress = async (
   client: TypedSupabaseClient,
-  week: number,
+  week?: number,
   day?: number
 ) => {
-  if (day) {
+  if (week && day) {
     const { data: progress } = (await client
       .from("progress")
       .select()
@@ -40,7 +42,7 @@ export const getProgress = async (
       .throwOnError()) as { data: Progress[] };
 
     return progress;
-  } else {
+  } else if (week) {
     const { data: progress } = (await client
       .from("progress")
       .select()
@@ -48,5 +50,7 @@ export const getProgress = async (
       .throwOnError()) as { data: Progress[] };
 
     return progress;
+  } else {
+    return []; // return empty array if no week and day numbers were given
   }
 };
