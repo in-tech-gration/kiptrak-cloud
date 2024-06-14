@@ -1,5 +1,10 @@
 import { TypedSupabaseClient } from "./supabase/client";
-import { Progress, ProgressDraft } from "./supabase/types";
+import {
+  Progress,
+  ProgressDraft,
+  Course,
+  RelProfileCourse,
+} from "./supabase/types";
 
 export const getProgressDraft = async (
   client: TypedSupabaseClient,
@@ -30,6 +35,7 @@ export const getProgressDraft = async (
 
 export const getProgress = async (
   client: TypedSupabaseClient,
+  userId: string,
   week?: number,
   day?: number
 ) => {
@@ -37,6 +43,7 @@ export const getProgress = async (
     const { data: progress } = (await client
       .from("progress")
       .select()
+      .eq("user", userId)
       .eq("week", week)
       .eq("day", day)
       .throwOnError()) as { data: Progress[] };
@@ -46,6 +53,7 @@ export const getProgress = async (
     const { data: progress } = (await client
       .from("progress")
       .select()
+      .eq("user", userId)
       .eq("week", week)
       .throwOnError()) as { data: Progress[] };
 
@@ -53,4 +61,44 @@ export const getProgress = async (
   } else {
     return []; // return empty array if no week and day numbers were given
   }
+};
+
+export const getCourses = async (client: TypedSupabaseClient) => {
+  const { data: courses } = (await client
+    .from("course")
+    .select()
+    .throwOnError()) as { data: Course[] };
+
+  return courses;
+};
+
+export const getEnrolledCourses = async (
+  client: TypedSupabaseClient,
+  userId: string
+) => {
+  const { data: enrolledCourses } = await client
+    .from("rel_profiles_course")
+    .select("course_name")
+    .eq("user_id", userId)
+    .throwOnError();
+
+  return enrolledCourses;
+};
+
+export const addEnrolledCourse = async (
+  client: TypedSupabaseClient,
+  userId: string,
+  courseName: string
+) => {
+  const { data: enrolledCourses } = (await client
+    .from("rel_profiles_course")
+    .insert([
+      {
+        user_id: userId,
+        course_name: courseName,
+      },
+    ])
+    .select()) as { data: RelProfileCourse[] };
+
+  return enrolledCourses;
 };
