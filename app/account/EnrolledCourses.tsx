@@ -3,6 +3,7 @@
 import React from "react";
 import { type User } from "@supabase/supabase-js";
 import { useCourseQuery } from "@/hooks/useCourseQuery";
+import { enrollCourseMutation } from "@/hooks/enrollCourseMutation";
 import { useEnrolledCoursesQuery } from "@/hooks/useEnrolledCoursesQuery";
 
 export default function EnrolledCourses(props: { user: User }) {
@@ -18,6 +19,21 @@ export default function EnrolledCourses(props: { user: User }) {
     isError: enrolledIsError,
     isLoading: enrolledIsLoading,
   } = useEnrolledCoursesQuery(user.id);
+
+  const courseMutation = enrollCourseMutation();
+
+  const handleEnrollCourse = (userId: string, courseName: string) => {
+    courseMutation.mutate({ userId, courseName });
+  };
+
+  const enrollDisabled = (courseName: string) => {
+    if (enrolledCourses) {
+      return (
+        enrolledCourses.find((c) => c.course_name === courseName) != undefined
+      );
+    }
+    return false;
+  };
 
   return (
     <div className="flex flex-col justify-center">
@@ -50,7 +66,7 @@ export default function EnrolledCourses(props: { user: User }) {
       ) : coursesIsError || !totalCourses ? (
         <div>Supabase Error</div>
       ) : (
-        <div className="border-t border-t-foreground/10 mt-3">
+        <div className="border-t border-t-foreground/10">
           <h2 className="text-center font-bold text-3xl p-2">
             Available Courses
           </h2>
@@ -70,12 +86,18 @@ export default function EnrolledCourses(props: { user: User }) {
                   {course.technologies.map((technology) => `${technology} `)}
                 </div>
               </div>
-              <div className="flex flex-col justify-center">
-                {/* TODO: Create a ReactQuery mutate Hook to alter the joined table rel_profiles_course */}
-                <button className="p-2 rounded font-bold bg-green-500 hover:bg-green-700">
-                  Enroll
-                </button>
-              </div>
+              {!enrollDisabled(course.name) && (
+                <div className="flex flex-col justify-center">
+                  <button
+                    className={
+                      "p-2 rounded font-bold bg-green-500 hover:bg-green-700"
+                    }
+                    onClick={() => handleEnrollCourse(user.id, course.name)}
+                  >
+                    Enroll
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>

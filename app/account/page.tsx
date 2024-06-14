@@ -16,9 +16,9 @@ export default async function Account() {
   }
 
   return (
-    <div className="flex flex-col w-3/4">
+    <div className="flex-1 flex flex-col w-1/2 gap-6">
       <EnrolledCourses user={user} />
-      <div className="border-t border-t-foreground/10 mt-3">
+      <div className="border-t border-t-foreground/10">
         <h2 className="text-center font-bold text-3xl p-2">Account Details</h2>
         <AccountForm user={user} />
       </div>
