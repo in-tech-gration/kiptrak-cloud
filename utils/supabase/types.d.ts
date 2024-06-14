@@ -182,19 +182,16 @@ export type Database = {
         Row: {
           course_name: string;
           created_at: string;
-          id: string;
           user_id: string;
         };
         Insert: {
           course_name: string;
           created_at?: string;
-          id?: string;
           user_id: string;
         };
         Update: {
           course_name?: string;
           created_at?: string;
-          id?: string;
           user_id?: string;
         };
         Relationships: [
