@@ -4,28 +4,25 @@ import React from "react";
 import { useParams } from "next/navigation";
 import { type User } from "@supabase/supabase-js";
 import { parseProgressParams } from "@/lib/parsers";
-import { useProgressDraftQuery } from "@/hooks/useProgressDraftQuery";
+import { useProgressQuery } from "@/hooks/useProgressQuery";
 
-type ProgressDashboardProps = {
-  user: User;
-};
-
-export default function ProgressDashboard(props: ProgressDashboardProps) {
+export default function ProgressDashboard(props: { user: User }) {
+  const { user } = props;
   const { week, day } = parseProgressParams(
     useParams<{ slug: string[] }>().slug
   );
 
   const {
-    data: progressDrafts,
+    data: progress,
     isLoading,
     isError,
-  } = useProgressDraftQuery(week, day);
+  } = useProgressQuery(user.id, week, day);
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (isError || !progressDrafts) {
+  if (isError || !progress) {
     return <div>Supabase Error</div>;
   }
 
@@ -44,7 +41,7 @@ export default function ProgressDashboard(props: ProgressDashboardProps) {
             <h2 className="text-3xl text-gray-400">Week: {week}</h2>
           )}
           <div>
-            {progressDrafts?.length ? (
+            {progress?.length ? (
               <table>
                 <thead>
                   <tr>
@@ -58,7 +55,7 @@ export default function ProgressDashboard(props: ProgressDashboardProps) {
                   </tr>
                 </thead>
                 <tbody>
-                  {progressDrafts?.map((progress, idx) => (
+                  {progress?.map((progress, idx) => (
                     <tr key={`p_${idx}`}>
                       <th>{progress.day}</th>
                       <th>{progress.concept}</th>
