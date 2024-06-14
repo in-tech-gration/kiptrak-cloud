@@ -1,11 +1,11 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import { createClient } from "@/utils/supabase/client";
 import { type User } from "@supabase/supabase-js";
 import Avatar from "./avatar";
+import { useSupabase } from "@/hooks/useSupabase";
 
-export default function AccountForm({ user }: { user: User | null }) {
-  const supabase = createClient();
+export default function AccountForm({ user }: { user: User }) {
+  const supabase = useSupabase();
   const [loading, setLoading] = useState(true);
   const [fullname, setFullname] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
@@ -19,7 +19,7 @@ export default function AccountForm({ user }: { user: User | null }) {
       const { data, error, status } = await supabase
         .from("profiles")
         .select(`full_name, username, website, avatar_url`)
-        .eq("id", user?.id)
+        .eq("id", user.id)
         .single();
 
       if (error && status !== 406) {
@@ -75,7 +75,7 @@ export default function AccountForm({ user }: { user: User | null }) {
   }
 
   return (
-    <div className="form-widget">
+    <div className="p-3 text-center">
       <div>
         <label htmlFor="email">Email</label>
         <input id="email" type="text" value={user?.email} disabled />
