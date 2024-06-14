@@ -178,6 +178,42 @@ export type Database = {
           },
         ];
       };
+      rel_profiles_course: {
+        Row: {
+          course_name: string;
+          created_at: string;
+          id: string;
+          user_id: string;
+        };
+        Insert: {
+          course_name: string;
+          created_at?: string;
+          id?: string;
+          user_id: string;
+        };
+        Update: {
+          course_name?: string;
+          created_at?: string;
+          id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "rel_profiles_course_course_name_fkey";
+            columns: ["course_name"];
+            isOneToOne: false;
+            referencedRelation: "course";
+            referencedColumns: ["name"];
+          },
+          {
+            foreignKeyName: "rel_profiles_course_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -303,3 +339,10 @@ export type InsertProgressDraft =
   Database["public"]["Tables"]["progress_draft"]["Insert"];
 export type UpdateProgressDraft =
   Database["public"]["Tables"]["progress_draft"]["Update"];
+
+export type RelProfileCourse =
+  Database["public"]["Tables"]["rel_profiles_course"]["Row"];
+export type InsertRelProfileCourse =
+  Database["public"]["Tables"]["rel_profiles_course"]["Insert"];
+export type UpdateRelProfileCourse =
+  Database["public"]["Tables"]["rel_profiles_course"]["Update"];
