@@ -199,14 +199,14 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: "rel_profiles_course_course_name_fkey";
+            foreignKeyName: "rel_profiles_courses_course_id_fkey";
             columns: ["course_id"];
             isOneToOne: false;
             referencedRelation: "courses";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "rel_profiles_course_user_id_fkey";
+            foreignKeyName: "rel_profiles_courses_user_id_fkey";
             columns: ["user_id"];
             isOneToOne: false;
             referencedRelation: "profiles";
