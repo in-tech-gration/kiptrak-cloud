@@ -9,10 +9,11 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      course: {
+      courses: {
         Row: {
           created_at: string;
           description: string;
+          id: string;
           length: number;
           name: string;
           technologies: string[];
@@ -20,13 +21,15 @@ export type Database = {
         Insert: {
           created_at?: string;
           description?: string;
+          id: string;
           length: number;
-          name: string;
+          name?: string;
           technologies: string[];
         };
         Update: {
           created_at?: string;
           description?: string;
+          id?: string;
           length?: number;
           name?: string;
           technologies?: string[];
@@ -116,8 +119,8 @@ export type Database = {
             foreignKeyName: "progress_course_fkey";
             columns: ["course"];
             isOneToOne: false;
-            referencedRelation: "course";
-            referencedColumns: ["name"];
+            referencedRelation: "courses";
+            referencedColumns: ["id"];
           },
           {
             foreignKeyName: "progress_user_id_fkey";
@@ -173,34 +176,34 @@ export type Database = {
             foreignKeyName: "progress_draft_course_fkey";
             columns: ["course"];
             isOneToOne: false;
-            referencedRelation: "course";
-            referencedColumns: ["name"];
+            referencedRelation: "courses";
+            referencedColumns: ["id"];
           },
         ];
       };
-      rel_profiles_course: {
+      rel_profiles_courses: {
         Row: {
-          course_name: string;
+          course_id: string;
           created_at: string;
           user_id: string;
         };
         Insert: {
-          course_name: string;
+          course_id: string;
           created_at?: string;
           user_id: string;
         };
         Update: {
-          course_name?: string;
+          course_id?: string;
           created_at?: string;
           user_id?: string;
         };
         Relationships: [
           {
             foreignKeyName: "rel_profiles_course_course_name_fkey";
-            columns: ["course_name"];
+            columns: ["course_id"];
             isOneToOne: false;
-            referencedRelation: "course";
-            referencedColumns: ["name"];
+            referencedRelation: "courses";
+            referencedColumns: ["id"];
           },
           {
             foreignKeyName: "rel_profiles_course_user_id_fkey";
@@ -318,9 +321,9 @@ export enum Level {
 }
 
 // Tables
-export type Course = Database["public"]["Tables"]["course"]["Row"];
-export type InsertCourse = Database["public"]["Tables"]["course"]["Insert"];
-export type UpdateCourse = Database["public"]["Tables"]["course"]["Update"];
+export type Course = Database["public"]["Tables"]["courses"]["Row"];
+export type InsertCourse = Database["public"]["Tables"]["courses"]["Insert"];
+export type UpdateCourse = Database["public"]["Tables"]["courses"]["Update"];
 
 export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 export type InsertProfile = Database["public"]["Tables"]["profiles"]["Insert"];
@@ -338,8 +341,8 @@ export type UpdateProgressDraft =
   Database["public"]["Tables"]["progress_draft"]["Update"];
 
 export type RelProfileCourse =
-  Database["public"]["Tables"]["rel_profiles_course"]["Row"];
+  Database["public"]["Tables"]["rel_profiles_courses"]["Row"];
 export type InsertRelProfileCourse =
-  Database["public"]["Tables"]["rel_profiles_course"]["Insert"];
+  Database["public"]["Tables"]["rel_profiles_courses"]["Insert"];
 export type UpdateRelProfileCourse =
-  Database["public"]["Tables"]["rel_profiles_course"]["Update"];
+  Database["public"]["Tables"]["rel_profiles_courses"]["Update"];

@@ -65,7 +65,7 @@ export const getProgress = async (
 
 export const getCourses = async (client: TypedSupabaseClient) => {
   const { data: courses } = (await client
-    .from("course")
+    .from("courses")
     .select()
     .throwOnError()) as { data: Course[] };
 
@@ -88,14 +88,14 @@ export const getEnrolledCourses = async (
 export const addEnrolledCourse = async (
   client: TypedSupabaseClient,
   userId: string,
-  courseName: string
+  courseId: string
 ) => {
   const { data: enrolledCourses } = (await client
-    .from("rel_profiles_course")
+    .from("rel_profiles_courses")
     .insert([
       {
         user_id: userId,
-        course_name: courseName,
+        course_id: courseId,
       },
     ])
     .select()) as { data: RelProfileCourse[] };

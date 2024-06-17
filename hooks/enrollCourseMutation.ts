@@ -8,12 +8,12 @@ export const enrollCourseMutation = () => {
 
   const mutationFn = async ({
     userId,
-    courseName,
+    courseId,
   }: {
     userId: string;
-    courseName: string;
+    courseId: string;
   }) => {
-    return addEnrolledCourse(client, userId, courseName);
+    return addEnrolledCourse(client, userId, courseId);
   };
 
   return useMutation({

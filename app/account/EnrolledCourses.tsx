@@ -22,15 +22,13 @@ export default function EnrolledCourses(props: { user: User }) {
 
   const courseMutation = enrollCourseMutation();
 
-  const handleEnrollCourse = (userId: string, courseName: string) => {
-    courseMutation.mutate({ userId, courseName });
+  const handleEnrollCourse = (userId: string, courseId: string) => {
+    courseMutation.mutate({ userId, courseId });
   };
 
-  const enrollDisabled = (courseName: string) => {
+  const enrollDisabled = (courseId: string) => {
     if (enrolledCourses) {
-      return (
-        enrolledCourses.find((c) => c.course_name === courseName) != undefined
-      );
+      return enrolledCourses.find((c) => c.id === courseId) != undefined;
     }
     return false;
   };
@@ -55,7 +53,7 @@ export default function EnrolledCourses(props: { user: User }) {
                 <div>Name:</div>
               </div>
               <div className="flex flex-col text-center text-green-500 font-bold">
-                <div>{enrolledCourse.course_name}</div>
+                <div>{enrolledCourse.name}</div>
               </div>
             </div>
           ))}
@@ -86,7 +84,7 @@ export default function EnrolledCourses(props: { user: User }) {
                   {course.technologies.map((technology) => `${technology} `)}
                 </div>
               </div>
-              {!enrollDisabled(course.name) && (
+              {!enrollDisabled(course.id) && (
                 <div className="flex flex-col justify-center">
                   <button
                     className={
