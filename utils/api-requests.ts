@@ -43,7 +43,7 @@ export const getProgress = async (
     const { data: progress } = (await client
       .from("progress")
       .select()
-      .eq("user", userId)
+      .eq("user_id", userId)
       .eq("week", week)
       .eq("day", day)
       .throwOnError()) as { data: Progress[] };
@@ -53,7 +53,7 @@ export const getProgress = async (
     const { data: progress } = (await client
       .from("progress")
       .select()
-      .eq("user", userId)
+      .eq("user_id", userId)
       .eq("week", week)
       .throwOnError()) as { data: Progress[] };
 

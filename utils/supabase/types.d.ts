@@ -80,7 +80,7 @@ export type Database = {
           instructions: string;
           level: Database["public"]["Enums"]["level"];
           task: string;
-          user: string | null;
+          user_id: string | null;
           week: number;
         };
         Insert: {
@@ -94,7 +94,7 @@ export type Database = {
           instructions?: string;
           level?: Database["public"]["Enums"]["level"];
           task?: string;
-          user?: string | null;
+          user_id?: string | null;
           week?: number;
         };
         Update: {
@@ -108,7 +108,7 @@ export type Database = {
           instructions?: string;
           level?: Database["public"]["Enums"]["level"];
           task?: string;
-          user?: string | null;
+          user_id?: string | null;
           week?: number;
         };
         Relationships: [
@@ -120,10 +120,10 @@ export type Database = {
             referencedColumns: ["name"];
           },
           {
-            foreignKeyName: "progress_user_fkey";
-            columns: ["user"];
+            foreignKeyName: "progress_user_id_fkey";
+            columns: ["user_id"];
             isOneToOne: false;
-            referencedRelation: "users";
+            referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
         ];
