@@ -76,11 +76,15 @@ export const getEnrolledCourses = async (
   client: TypedSupabaseClient,
   userId: string
 ) => {
-  const { data: enrolledCourses } = await client
-    .from("rel_profiles_course")
-    .select("course_name")
+  const { data } = await client
+    .from("rel_profiles_courses")
+    .select("courses (id, name)")
     .eq("user_id", userId)
     .throwOnError();
+
+  const enrolledCourses = data?.map(
+    (value) => value.courses
+  ) as Partial<Course>[];
 
   return enrolledCourses;
 };
