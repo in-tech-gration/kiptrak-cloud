@@ -90,7 +90,7 @@ export default function EnrolledCourses(props: { user: User }) {
                     className={
                       "p-2 rounded font-bold bg-green-500 hover:bg-green-700"
                     }
-                    onClick={() => handleEnrollCourse(user.id, course.name)}
+                    onClick={() => handleEnrollCourse(user.id, course.id)}
                   >
                     Enroll
                   </button>
