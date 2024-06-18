@@ -1,9 +1,11 @@
+import { PostgrestError } from "@supabase/supabase-js";
 import { TypedSupabaseClient } from "./supabase/client";
 import {
   Progress,
   ProgressDraft,
   Course,
   RelProfileCourse,
+  ReturnTypeHandleEnrollCourse,
 } from "./supabase/types";
 
 export const getProgressDraft = async (
@@ -104,5 +106,16 @@ export const addEnrolledCourse = async (
     ])
     .select()) as { data: RelProfileCourse[] };
 
+  const { data, error } = (await client.rpc("handle_enroll_course", {
+    course_name: courseId,
+    val_for_user_id: userId,
+  })) as { data: ReturnTypeHandleEnrollCourse; error: PostgrestError | null };
+
+  // TODO: Check how to get the return value from the mutation hook to properly display the message to the UI
+  if (error !== null) {
+    console.log(error);
+  } else {
+    console.log(data);
+  }
   return enrolledCourses;
 };

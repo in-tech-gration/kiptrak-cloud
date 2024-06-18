@@ -219,7 +219,13 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      handle_enroll_course: {
+        Args: {
+          course_name: string;
+          val_for_user_id: string;
+        };
+        Returns: string;
+      };
     };
     Enums: {
       level: "Beginner" | "Intermediate" | "Advanced";
@@ -346,3 +352,9 @@ export type InsertRelProfileCourse =
   Database["public"]["Tables"]["rel_profiles_courses"]["Insert"];
 export type UpdateRelProfileCourse =
   Database["public"]["Tables"]["rel_profiles_courses"]["Update"];
+
+// Functions
+export type ArgsHandleEnrollCourse =
+  Database["public"]["Functions"]["handle_enroll_course"]["Args"];
+export type ReturnTypeHandleEnrollCourse =
+  Database["public"]["Functions"]["handle_enroll_course"]["Returns"];
