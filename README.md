@@ -43,3 +43,7 @@ Powered by [intechgration](https://intechgration.io/)
    KipTrak Cloud should now be running on [localhost:3000](http://localhost:3000/).
 
 > Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+
+---
+
+_Based on: [https://github.com/supabase/supabase/tree/master/examples/auth/nextjs](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)_
