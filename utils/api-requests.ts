@@ -38,6 +38,7 @@ export const getProgressDraft = async (
 export const getProgress = async (
   client: TypedSupabaseClient,
   userId: string,
+  courseId: string,
   week?: number,
   day?: number
 ) => {
@@ -46,6 +47,7 @@ export const getProgress = async (
       .from("progress")
       .select()
       .eq("user_id", userId)
+      .eq("course", courseId)
       .eq("week", week)
       .eq("day", day)
       .throwOnError()) as { data: Progress[] };
@@ -56,6 +58,7 @@ export const getProgress = async (
       .from("progress")
       .select()
       .eq("user_id", userId)
+      .eq("course", courseId)
       .eq("week", week)
       .throwOnError()) as { data: Progress[] };
 
