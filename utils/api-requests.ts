@@ -68,6 +68,20 @@ export const getProgress = async (
   }
 };
 
+export const getCourse = async (
+  client: TypedSupabaseClient,
+  courseId: string
+) => {
+  const { data: course } = (await client
+    .from("courses")
+    .select()
+    .eq("id", courseId)
+    .single()
+    .throwOnError()) as { data: Course };
+
+  return course;
+};
+
 export const getCourses = async (client: TypedSupabaseClient) => {
   const { data: courses } = (await client
     .from("courses")
