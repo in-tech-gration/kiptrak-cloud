@@ -5,14 +5,15 @@ import { useParams } from "next/navigation";
 import { type User } from "@supabase/supabase-js";
 import { parseProgressParams } from "@/lib/parsers";
 import { useProgressQuery } from "@/hooks/useProgressQuery";
+import { useCourseQuery } from "@/hooks/useCourseQuery";
 
 export default function ProgressDashboard(props: { user: User }) {
   const { user } = props;
-  const { course, day, week } = parseProgressParams(
+  const { courseId, day, week } = parseProgressParams(
     useParams<{ slug: string[] }>().slug
   );
 
-  if (!course || !week) {
+  if (!courseId || !week) {
     return (
       <div className="flex-1 w-full flex flex-col gap-20 justify-center items-center">
         <h1 className="font-bold text-4xl text-red-500">Error 404 Here</h1>
@@ -21,22 +22,35 @@ export default function ProgressDashboard(props: { user: User }) {
   }
 
   const {
-    data: progress,
-    isLoading,
-    isError,
-  } = useProgressQuery(user.id, course, week, day);
+    data: course,
+    isLoading: courseLoading,
+    isError: courseError,
+  } = useCourseQuery(courseId);
 
-  if (isLoading) {
+  const {
+    data: progress,
+    isLoading: progressLoading,
+    isError: progressError,
+  } = useProgressQuery(user.id, courseId, week, day);
+
+  if (courseLoading || progressLoading) {
     return <div>Loading...</div>;
   }
 
-  if (isError || !progress) {
-    return <div>Supabase Error</div>;
+  if (progressError || courseError || !progress || !course) {
+    return (
+      <div className="flex-1 w-full flex flex-col gap-20 justify-center items-center">
+        <h1 className="font-bold text-4xl text-red-500">Supabase Error</h1>
+      </div>
+    );
   }
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 justify-center items-center">
-      <h1 className="font-bold text-4xl text-green-500">Progress</h1>
+      <h1 className="font-bold text-4xl">
+        <span className="text-gray-400">{course.name}'s</span>{" "}
+        <span className="text-green-500">Progress</span>
+      </h1>
       {day ? (
         <h2 className="text-3xl text-gray-400">
           Week: {week} and Day: {day}
@@ -45,11 +59,12 @@ export default function ProgressDashboard(props: { user: User }) {
         <h2 className="text-3xl text-gray-400">Week: {week}</h2>
       )}
       <div>
+        {/* TODO: Make this editable */}
         {progress?.length ? (
           <table>
             <thead>
               <tr>
-                <th>Day</th>
+                {!day && <th>Day</th>}
                 <th>Concept</th>
                 <th>Task</th>
                 <th>Level</th>
@@ -61,7 +76,7 @@ export default function ProgressDashboard(props: { user: User }) {
             <tbody>
               {progress?.map((progress, idx) => (
                 <tr key={`p_${idx}`}>
-                  <th>{progress.day}</th>
+                  {!day && <th>{progress.day}</th>}
                   <th>{progress.concept}</th>
                   <th>{progress.task}</th>
                   <th>{progress.level}</th>
@@ -78,6 +93,7 @@ export default function ProgressDashboard(props: { user: User }) {
           </h3>
         )}
       </div>
+      {/* TODO: Add previous and next buttons for better user experience */}
     </div>
   );
 }
