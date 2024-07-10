@@ -2,7 +2,6 @@ import { getProgress } from "@/utils/api-requests";
 import { useSupabase } from "./useSupabase";
 import { useQuery } from "@tanstack/react-query";
 
-// TODO: Update progressQuery to fetch progress by courseId also
 export const useProgressQuery = (
   userId: string,
   courseId: string,
