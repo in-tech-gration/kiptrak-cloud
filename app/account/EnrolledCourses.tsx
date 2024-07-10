@@ -2,7 +2,7 @@
 
 import React from "react";
 import { type User } from "@supabase/supabase-js";
-import { useCourseQuery } from "@/hooks/useCourseQuery";
+import { useCoursesQuery } from "@/hooks/useCoursesQuery";
 import { enrollCourseMutation } from "@/hooks/enrollCourseMutation";
 import { useEnrolledCoursesQuery } from "@/hooks/useEnrolledCoursesQuery";
 
@@ -13,7 +13,7 @@ export default function EnrolledCourses(props: { user: User }) {
     data: totalCourses,
     isError: coursesIsError,
     isLoading: coursesIsLoading,
-  } = useCourseQuery();
+  } = useCoursesQuery();
   const {
     data: enrolledCourses,
     isError: enrolledIsError,

@@ -2,7 +2,7 @@ import { getCourses } from "@/utils/api-requests";
 import { useSupabase } from "./useSupabase";
 import { useQuery } from "@tanstack/react-query";
 
-export const useCourseQuery = () => {
+export const useCoursesQuery = () => {
   const client = useSupabase();
   const queryKey = ["courses"];
 
