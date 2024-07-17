@@ -1,9 +1,7 @@
-import { createClient } from "@/utils/supabase/server";
+import { supabase } from "@/utils/supabase/server";
 import Link from "next/link";
 
 export default async function Welcome() {
-  const supabase = createClient();
-
   const {
     data: { user },
   } = await supabase.auth.getUser();

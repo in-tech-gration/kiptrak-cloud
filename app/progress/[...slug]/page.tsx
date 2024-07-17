@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { createClient } from "@/utils/supabase/server";
+import { supabase } from "@/utils/supabase/server";
 import ProgressDashboard from "./ProgressDashboard";
 
 // Generate Static URL parameters for static page generation
@@ -15,7 +15,6 @@ export function generateStaticParams() {
 }
 
 export default async function ProgressByWeekAndDay() {
-  const supabase = createClient();
 
   const { data, error } = await supabase.auth.getUser();
 

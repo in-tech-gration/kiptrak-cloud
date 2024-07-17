@@ -1,12 +1,10 @@
 import { redirect } from "next/navigation";
 
-import { createClient } from "@/utils/supabase/server";
+import { supabase } from "@/utils/supabase/server";
 
 import ProgressGrid from "./ProgressGrid";
 
 export default async function ProgressPage() {
-  const supabase = createClient();
-
   const { data, error } = await supabase.auth.getUser();
 
   if (error || !data.user) {

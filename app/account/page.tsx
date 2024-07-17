@@ -1,10 +1,9 @@
-import { createClient } from "@/utils/supabase/server";
+import { supabase } from "@/utils/supabase/server";
 import AccountForm from "./account-form";
 import { redirect } from "next/navigation";
 import EnrolledCourses from "./EnrolledCourses";
 
 export default async function Account() {
-  const supabase = createClient();
 
   const {
     data: { user },

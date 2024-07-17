@@ -1,19 +1,16 @@
+"use client";
+
 import Link from "next/link";
-import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "./submit-button";
+import { useSupabase } from "@/hooks/useSupabase";
 
-export default function Login({
-  searchParams,
-}: {
-  searchParams: { message: string };
-}) {
+export default function Login() {
+  const supabase = useSupabase();
+
   const signIn = async (formData: FormData) => {
-    "use server";
-
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    const supabase = createClient();
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -21,7 +18,8 @@ export default function Login({
     });
 
     if (error) {
-      return redirect("/login?message=Could not authenticate user");
+      console.log(`Could not authenticate user: ${error.message}`);
+      return redirect("/login");
     }
 
     return redirect("/");
@@ -56,11 +54,6 @@ export default function Login({
         >
           Sign In
         </SubmitButton>
-        {searchParams?.message && (
-          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
-            {searchParams.message}
-          </p>
-        )}
         <Link
           href="/"
           className="py-2 px-4 rounded-md text-foreground bg-btn-background hover:bg-btn-background-hover flex justify-center items-center group text-sm"
