@@ -1,11 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
 import Link from "next/link";
+import React, { useState } from "react";
+import { redirect } from "next/navigation";
 import { Course } from "@/utils/supabase/types";
 import CourseGrid from "@/components/CoursesGrid";
+import { useSession } from "@supabase/auth-helpers-react";
 
 export default function ProgressGrid() {
+  const session = useSession();
+
+  if (!session?.user) {
+    redirect("/login");
+  }
+
   const [course, setCourse] = useState<Course>();
 
   return (

@@ -1,13 +1,18 @@
 "use client";
 
 import React from "react";
-import { type User } from "@supabase/supabase-js";
 import { useCoursesQuery } from "@/hooks/useCoursesQuery";
 import { enrollCourseMutation } from "@/hooks/enrollCourseMutation";
 import { useEnrolledCoursesQuery } from "@/hooks/useEnrolledCoursesQuery";
+import { useUser } from "@supabase/auth-helpers-react";
+import { redirect } from "next/navigation";
 
-export default function EnrolledCourses(props: { user: User }) {
-  const { user } = props;
+export default function EnrolledCourses() {
+  const user = useUser();
+
+  if (!user) {
+    redirect("/login");
+  }
 
   const {
     data: totalCourses,

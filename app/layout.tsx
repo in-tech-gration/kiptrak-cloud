@@ -3,7 +3,7 @@ import "./globals.css";
 import Header from "@/components/ui/Header";
 import Footer from "@/components/ui/Footer";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
-import {  } from "@supabase/ssr"
+import { SessionProvider } from "@/providers/SessionProvider";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -25,9 +25,11 @@ export default function RootLayout({
       <body className="bg-background text-foreground">
         <main className="min-h-screen flex flex-col items-center">
           <ReactQueryProvider>
-            <Header />
-            {children}
-            <Footer />
+            <SessionProvider>
+              <Header />
+              {children}
+              <Footer />
+            </SessionProvider>
           </ReactQueryProvider>
         </main>
       </body>

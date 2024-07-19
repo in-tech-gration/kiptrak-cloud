@@ -1,14 +1,19 @@
 "use client";
 
 import React from "react";
-import { useParams } from "next/navigation";
-import { type User } from "@supabase/supabase-js";
+import { redirect, useParams } from "next/navigation";
 import { parseProgressParams } from "@/lib/parsers";
+import { useUser } from "@supabase/auth-helpers-react";
 import { useCourseQuery } from "@/hooks/useCourseQuery";
 import { ProgressSpreadsheet } from "@/components/ProgressSpreadsheet";
 
-export default function ProgressDashboard(props: { user: User }) {
-  const { user } = props;
+export default function ProgressDashboard() {
+  const user = useUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
   const { courseId, day, week } = parseProgressParams(
     useParams<{ slug: string[] }>().slug
   );

@@ -1,10 +1,10 @@
-import { supabase } from "@/utils/supabase/server";
+"use client";
+
+import { useSession } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 
-export default async function Welcome() {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+export default function Welcome() {
+  const session = useSession();
 
   return (
     <div className="flex flex-col gap-16 items-center">
@@ -16,7 +16,7 @@ export default async function Welcome() {
         The ideal tool to keep track of your progress
       </p>
       <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8" />
-      {user ? (
+      {session?.user ? (
         <h2>
           Don't waste any more time and hop on to the{" "}
           <Link href="/progress" className="font-bold hover:underline">

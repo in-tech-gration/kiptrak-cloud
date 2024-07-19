@@ -1,30 +1,21 @@
-import { supabase } from "@/utils/supabase/server";
+"use client";
+
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { SignOutButton } from "./SignOutButton";
+import { useSession } from "@supabase/auth-helpers-react";
 
-export default async function AuthButton() {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+export default function AuthButton() {
+  const session = useSession();
 
-  const signOut = async () => {
-    await supabase.auth.signOut();
-    return redirect("/");
-  };
-
-  return user ? (
+  return session?.user ? (
     <div className="flex items-center gap-4">
       <Link
         href="/account"
         className="font-bold hover:border hover:rounded hover:border-green-500 hover:text-gray-400 p-3"
       >
-        {user.email}
+        {session.user.email}
       </Link>
-      <form action={signOut}>
-        <button className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
-          Logout
-        </button>
-      </form>
+      <SignOutButton />
     </div>
   ) : (
     <Link

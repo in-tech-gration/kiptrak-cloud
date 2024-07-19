@@ -1,10 +1,17 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
-import { type User } from "@supabase/supabase-js";
-import Avatar from "./avatar";
+import Avatar from "./Avatar";
 import { useSupabase } from "@/hooks/useSupabase";
+import { useUser } from "@supabase/auth-helpers-react";
+import { redirect } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 
-export default function AccountForm({ user }: { user: User }) {
+export default function AccountForm() {
+  const user = useUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
   const supabase = useSupabase();
   const [loading, setLoading] = useState(true);
   const [fullname, setFullname] = useState<string | null>(null);
