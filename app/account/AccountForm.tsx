@@ -48,7 +48,9 @@ export default function AccountForm() {
   }, [session?.user, supabase]);
 
   useEffect(() => {
-    getProfile();
+    if (session) {
+      getProfile();
+    }
   }, [session?.user, getProfile]);
 
   async function updateProfile({
