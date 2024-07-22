@@ -9,8 +9,11 @@ import {
   keyColumn,
   Column,
 } from "react-datasheet-grid";
+import { useEffect, useState } from "react";
 import "react-datasheet-grid/dist/style.css";
+import { Progress } from "@/utils/supabase/types";
 import { useProgressQuery } from "@/hooks/useProgressQuery";
+import { useProgressUpdate } from "@/hooks/useProgressUpdate";
 import { SelectComponent, SelectOptions } from "./SelectComponent";
 
 type ProgressSpreadsheetProps = {
@@ -22,12 +25,21 @@ type ProgressSpreadsheetProps = {
 
 export const ProgressSpreadsheet = (props: ProgressSpreadsheetProps) => {
   const { userId, courseId, week, day } = props;
+  const [progress, setProgress] = useState<Progress[]>([]);
   const { data, isLoading, isError, error } = useProgressQuery(
     userId,
     courseId,
     week,
     day
   );
+
+  const mutation = useProgressUpdate();
+
+  useEffect(() => {
+    if (data) {
+      setProgress(data);
+    }
+  }, [data]);
 
   const selectColumn = (
     options: SelectOptions
@@ -84,6 +96,11 @@ export const ProgressSpreadsheet = (props: ProgressSpreadsheetProps) => {
     },
   ];
 
+  const updateButtonHidden = data === progress;
+  const handleSpreadsheetUpdate = () => {
+    mutation.mutate(progress);
+  };
+
   let content;
 
   if (isLoading) {
@@ -92,13 +109,35 @@ export const ProgressSpreadsheet = (props: ProgressSpreadsheetProps) => {
     content = <div>{error.message}</div>;
   } else {
     content = (
-      <DataSheetGrid
-        lockRows
-        value={data}
-        // TODO: Find the proper way with ReactQuery
-        // onChange={refetch}
-        columns={columns}
-      />
+      <>
+        <DataSheetGrid<Progress>
+          lockRows
+          value={progress}
+          onChange={(value) => {
+            setProgress(value);
+          }}
+          columns={columns as Column<Progress>[]}
+        />
+        {!updateButtonHidden && (
+          <button
+            className="float-right rounded bg-green-500 p-2 mt-1"
+            onClick={handleSpreadsheetUpdate}
+          >
+            {!mutation.isPending ? (
+              "Update"
+            ) : (
+              <div
+                className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-primary motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                role="status"
+              >
+                <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                  Loading...
+                </span>
+              </div>
+            )}
+          </button>
+        )}
+      </>
     );
   }
 
