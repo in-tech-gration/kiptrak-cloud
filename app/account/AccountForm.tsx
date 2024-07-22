@@ -1,14 +1,14 @@
 "use client";
 import Avatar from "./Avatar";
-import { useSupabase } from "@/hooks/useSupabase";
-import { useUser } from "@supabase/auth-helpers-react";
 import { redirect } from "next/navigation";
+import { useSupabase } from "@/hooks/useSupabase";
 import { useCallback, useEffect, useState } from "react";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 
 export default function AccountForm() {
-  const user = useUser();
+  const { session, isLoading: sessionLoading } = useSessionContext();
 
-  if (!user) {
+  if (!sessionLoading && !session?.user) {
     redirect("/login");
   }
 
@@ -26,7 +26,7 @@ export default function AccountForm() {
       const { data, error, status } = await supabase
         .from("profiles")
         .select(`full_name, username, website, avatar_url`)
-        .eq("id", user.id)
+        .eq("id", session?.user.id as string)
         .single();
 
       if (error && status !== 406) {
@@ -45,11 +45,11 @@ export default function AccountForm() {
     } finally {
       setLoading(false);
     }
-  }, [user, supabase]);
+  }, [session?.user, supabase]);
 
   useEffect(() => {
     getProfile();
-  }, [user, getProfile]);
+  }, [session?.user, getProfile]);
 
   async function updateProfile({
     username,
@@ -65,7 +65,7 @@ export default function AccountForm() {
       setLoading(true);
 
       const { error } = await supabase.from("profiles").upsert({
-        id: user?.id as string,
+        id: session?.user.id as string,
         full_name: fullname,
         username,
         website,
@@ -85,7 +85,7 @@ export default function AccountForm() {
     <div className="p-3 text-center">
       <div>
         <label htmlFor="email">Email</label>
-        <input id="email" type="text" value={user?.email} disabled />
+        <input id="email" type="text" value={session?.user.email} disabled />
       </div>
       <div>
         <label htmlFor="fullName">Full Name</label>
@@ -115,7 +115,7 @@ export default function AccountForm() {
         />
       </div>
       <Avatar
-        uid={user?.id ?? null}
+        uid={session?.user.id ?? null}
         url={avatar_url}
         size={150}
         onUpload={(url) => {

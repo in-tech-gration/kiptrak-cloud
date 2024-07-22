@@ -1,16 +1,16 @@
 "use client";
 
 import React from "react";
+import { redirect } from "next/navigation";
 import { useCoursesQuery } from "@/hooks/useCoursesQuery";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import { enrollCourseMutation } from "@/hooks/enrollCourseMutation";
 import { useEnrolledCoursesQuery } from "@/hooks/useEnrolledCoursesQuery";
-import { useUser } from "@supabase/auth-helpers-react";
-import { redirect } from "next/navigation";
 
 export default function EnrolledCourses() {
-  const user = useUser();
+  const { session, isLoading: sessionLoading } = useSessionContext();
 
-  if (!user) {
+  if (!sessionLoading && !session?.user) {
     redirect("/login");
   }
 
@@ -23,7 +23,7 @@ export default function EnrolledCourses() {
     data: enrolledCourses,
     isError: enrolledIsError,
     isLoading: enrolledIsLoading,
-  } = useEnrolledCoursesQuery(user.id);
+  } = useEnrolledCoursesQuery(session?.user.id as string);
 
   const courseMutation = enrollCourseMutation();
 
@@ -95,7 +95,9 @@ export default function EnrolledCourses() {
                     className={
                       "p-2 rounded font-bold bg-green-500 hover:bg-green-700"
                     }
-                    onClick={() => handleEnrollCourse(user.id, course.id)}
+                    onClick={() =>
+                      handleEnrollCourse(session?.user.id as string, course.id)
+                    }
                   >
                     Enroll
                   </button>

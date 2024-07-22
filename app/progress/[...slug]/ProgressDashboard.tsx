@@ -1,16 +1,16 @@
 "use client";
 
 import React from "react";
-import { redirect, useParams } from "next/navigation";
 import { parseProgressParams } from "@/lib/parsers";
-import { useUser } from "@supabase/auth-helpers-react";
+import { redirect, useParams } from "next/navigation";
 import { useCourseQuery } from "@/hooks/useCourseQuery";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import { ProgressSpreadsheet } from "@/components/ProgressSpreadsheet";
 
 export default function ProgressDashboard() {
-  const user = useUser();
+  const { session, isLoading: sessionLoading } = useSessionContext();
 
-  if (!user) {
+  if (!sessionLoading && !session?.user) {
     redirect("/login");
   }
 
@@ -56,7 +56,7 @@ export default function ProgressDashboard() {
         )}
         <div style={{ width: "90%" }}>
           <ProgressSpreadsheet
-            userId={user.id}
+            userId={session?.user.id as string}
             courseId={course.id}
             week={week}
             day={day}
