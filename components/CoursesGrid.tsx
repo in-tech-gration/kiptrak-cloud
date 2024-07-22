@@ -27,8 +27,9 @@ export default function CoursesGrid(props: CourseListProps) {
         Available Courses
       </h2>
       <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-4 place-items-center">
-        {courses?.map((c) => (
+        {courses?.map((c, index) => (
           <button
+            key={`course-button-${index}`}
             className={`grid gap-2 bg-white border-4 text-green-500 rounded p-2 place-items-center hover:border-green-500 ${course && course.name == c.name && "border-green-500"}`}
             onClick={() => setCourse(c)}
           >
