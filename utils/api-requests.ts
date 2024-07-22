@@ -68,6 +68,19 @@ export const getProgress = async (
   }
 };
 
+export const updateProgress = async (
+  client: TypedSupabaseClient,
+  updateData: Progress[]
+) => {
+  const { data: progress } = (await client
+    .from("progress")
+    .upsert(updateData)
+    .select()
+    .throwOnError()) as { data: Progress[] };
+
+  return progress;
+};
+
 export const getCourse = async (
   client: TypedSupabaseClient,
   courseId: string
