@@ -68,6 +68,7 @@ export const ProgressSpreadsheet = (props: ProgressSpreadsheetProps) => {
       ...keyColumn("task", textColumn),
       disabled: true,
       title: "Task",
+      grow: 2.5,
     },
     {
       ...keyColumn(
@@ -81,18 +82,24 @@ export const ProgressSpreadsheet = (props: ProgressSpreadsheetProps) => {
         })
       ),
       title: "Level",
+      disabled: true,
+      grow: 0.5,
+    },
+    {
+      ...keyColumn("instructions", textColumn),
+      disbled: true,
+      title: "Instructions",
+      grow: 3,
     },
     {
       ...keyColumn("confidence", intColumn),
       title: "Confidence",
+      grow: 0.5,
     },
     {
       ...keyColumn("completed", checkboxColumn),
       title: "Completed",
-    },
-    {
-      ...keyColumn("instructions", textColumn),
-      title: "Instructions",
+      grow: 0.5,
     },
   ];
 
