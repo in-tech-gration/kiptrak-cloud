@@ -1,9 +1,10 @@
-import { GeistSans } from "geist/font/sans";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
+import { GeistSans } from "geist/font/sans";
 import Header from "@/components/ui/Header";
 import Footer from "@/components/ui/Footer";
-import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import { SessionProvider } from "@/providers/SessionProvider";
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -27,6 +28,7 @@ export default function RootLayout({
           <ReactQueryProvider>
             <SessionProvider>
               <Header />
+              <Toaster position="top-center" />
               {children}
               <Footer />
             </SessionProvider>

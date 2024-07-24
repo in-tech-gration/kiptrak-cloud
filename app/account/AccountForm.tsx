@@ -1,5 +1,6 @@
 "use client";
 import Avatar from "./Avatar";
+import { toast } from "react-hot-toast";
 import { redirect } from "next/navigation";
 import { useSupabase } from "@/hooks/useSupabase";
 import { useCallback, useEffect, useState } from "react";
@@ -41,7 +42,7 @@ export default function AccountForm() {
         setAvatarUrl(data.avatar_url);
       }
     } catch (error) {
-      alert("Error loading user data!");
+      toast.error("Error loading user data!");
     } finally {
       setLoading(false);
     }
@@ -75,9 +76,9 @@ export default function AccountForm() {
         updated_at: new Date().toISOString(),
       });
       if (error) throw error;
-      alert("Profile updated!");
+      toast.success("Profile updated!");
     } catch (error) {
-      alert("Error updating the data!");
+      toast.error("Error updating the data!");
     } finally {
       setLoading(false);
     }

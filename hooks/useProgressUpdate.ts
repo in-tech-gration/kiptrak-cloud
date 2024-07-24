@@ -1,3 +1,4 @@
+import { toast } from "react-hot-toast";
 import { useSupabase } from "./useSupabase";
 import { Progress } from "@/utils/supabase/types";
 import { updateProgress } from "@/utils/api-requests";
@@ -17,6 +18,9 @@ export const useProgressUpdate = () => {
       queryClient.invalidateQueries({
         queryKey: ["progress"],
       });
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 };

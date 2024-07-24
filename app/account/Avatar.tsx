@@ -1,7 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { toast } from "react-hot-toast";
 import { useSupabase } from "@/hooks/useSupabase";
+import React, { useEffect, useState } from "react";
 
 export default function Avatar({
   uid,
@@ -31,6 +32,7 @@ export default function Avatar({
         const url = URL.createObjectURL(data);
         setAvatarUrl(url);
       } catch (error) {
+        toast.error("Error downloading image");
         console.log("Error downloading image: ", error);
       }
     }
@@ -62,7 +64,7 @@ export default function Avatar({
 
       onUpload(filePath);
     } catch (error) {
-      alert("Error uploading avatar!");
+      toast.error("Error uploading avatar!");
     } finally {
       setUploading(false);
     }

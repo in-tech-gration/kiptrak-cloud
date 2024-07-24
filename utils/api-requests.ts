@@ -1,3 +1,4 @@
+import { toast } from "react-hot-toast";
 import { PostgrestError } from "@supabase/supabase-js";
 import { TypedSupabaseClient } from "./supabase/client";
 import {
@@ -14,20 +15,34 @@ export const getProgressDraft = async (
   day?: number
 ) => {
   if (week && day) {
-    const { data: progress } = (await client
+    const { data: progress, error } = (await client
       .from("progress_draft")
       .select()
       .eq("week", week)
-      .eq("day", day)
-      .throwOnError()) as { data: ProgressDraft[] };
+      .eq("day", day)) as {
+      data: ProgressDraft[];
+      error: PostgrestError | null;
+    };
+
+    if (error) {
+      toast.error(error.message);
+      throw error;
+    }
 
     return progress;
   } else if (week) {
-    const { data: progress } = (await client
+    const { data: progress, error } = (await client
       .from("progress_draft")
       .select()
-      .eq("week", week)
-      .throwOnError()) as { data: ProgressDraft[] };
+      .eq("week", week)) as {
+      data: ProgressDraft[];
+      error: PostgrestError | null;
+    };
+
+    if (error) {
+      toast.error(error.message);
+      throw error;
+    }
 
     return progress;
   } else {
@@ -43,24 +58,32 @@ export const getProgress = async (
   day?: number
 ) => {
   if (week && day) {
-    const { data: progress } = (await client
+    const { data: progress, error } = (await client
       .from("progress")
       .select()
       .eq("user_id", userId)
       .eq("course", courseId)
       .eq("week", week)
-      .eq("day", day)
-      .throwOnError()) as { data: Progress[] };
+      .eq("day", day)) as { data: Progress[]; error: PostgrestError | null };
+
+    if (error) {
+      toast.error(error.message);
+      throw error;
+    }
 
     return progress;
   } else if (week) {
-    const { data: progress } = (await client
+    const { data: progress, error } = (await client
       .from("progress")
       .select()
       .eq("user_id", userId)
       .eq("course", courseId)
-      .eq("week", week)
-      .throwOnError()) as { data: Progress[] };
+      .eq("week", week)) as { data: Progress[]; error: PostgrestError | null };
+
+    if (error) {
+      toast.error(error.message);
+      throw error;
+    }
 
     return progress;
   } else {
@@ -72,11 +95,15 @@ export const updateProgress = async (
   client: TypedSupabaseClient,
   updateData: Progress[]
 ) => {
-  const { data: progress } = (await client
+  const { data: progress, error } = (await client
     .from("progress")
     .upsert(updateData)
-    .select()
-    .throwOnError()) as { data: Progress[] };
+    .select()) as { data: Progress[]; error: PostgrestError | null };
+
+  if (error) {
+    toast.error(error.message);
+    throw error;
+  }
 
   return progress;
 };
@@ -85,21 +112,30 @@ export const getCourse = async (
   client: TypedSupabaseClient,
   courseId: string
 ) => {
-  const { data: course } = (await client
+  const { data: course, error } = (await client
     .from("courses")
     .select()
     .eq("id", courseId)
-    .single()
-    .throwOnError()) as { data: Course };
+    .single()) as { data: Course; error: PostgrestError | null };
+
+  if (error) {
+    toast.error(error.message);
+    throw error;
+  }
 
   return course;
 };
 
 export const getCourses = async (client: TypedSupabaseClient) => {
-  const { data: courses } = (await client
-    .from("courses")
-    .select()
-    .throwOnError()) as { data: Course[] };
+  const { data: courses, error } = (await client.from("courses").select()) as {
+    data: Course[];
+    error: PostgrestError | null;
+  };
+
+  if (error) {
+    toast.error(error.message);
+    throw error;
+  }
 
   return courses;
 };
@@ -108,11 +144,15 @@ export const getEnrolledCourses = async (
   client: TypedSupabaseClient,
   userId: string
 ) => {
-  const { data } = await client
+  const { data, error } = await client
     .from("rel_profiles_courses")
     .select("courses (id, name)")
-    .eq("user_id", userId)
-    .throwOnError();
+    .eq("user_id", userId);
+
+  if (error) {
+    toast.error(error.message);
+    throw error;
+  }
 
   const enrolledCourses = data?.map(
     (value) => value.courses
@@ -139,13 +179,15 @@ export const addEnrolledCourse = async (
   const { data, error } = (await client.rpc("handle_enroll_course", {
     course_name: courseId,
     val_for_user_id: userId,
-  })) as { data: ReturnTypeHandleEnrollCourse; error: PostgrestError | null };
+  })) as {
+    data: ReturnTypeHandleEnrollCourse;
+    error: PostgrestError | null;
+  };
 
-  // TODO: Check how to get the return value from the mutation hook to properly display the message to the UI
-  if (error !== null) {
-    console.log(error);
-  } else {
-    console.log(data);
+  if (error) {
+    toast.error(error.message);
+    throw error;
   }
+  console.log(data);
   return enrolledCourses;
 };

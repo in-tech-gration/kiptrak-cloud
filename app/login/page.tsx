@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { toast } from "react-hot-toast";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "./submit-button";
 import { useSupabase } from "@/hooks/useSupabase";
@@ -18,6 +19,7 @@ export default function Login() {
     });
 
     if (error) {
+      toast.error("Could not authenticate user.");
       console.log(`Could not authenticate user: ${error.message}`);
       return redirect("/login");
     }
