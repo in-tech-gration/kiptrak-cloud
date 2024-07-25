@@ -27,7 +27,7 @@
 }
 
 .animate-in {
-  animation: animateIn 0.3s ease 0.15s both;
+  animation: animateIn 2s ease 0.5s both;
 }
 
 @keyframes animateIn {
