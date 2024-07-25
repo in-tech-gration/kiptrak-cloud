@@ -62,12 +62,6 @@ export default function ProgressGrid() {
                     >
                       5
                     </Link>
-                    <Link
-                      className="bg-green-500 text-white py-2 mx-1 rounded text-center h-10 w-10"
-                      href={`/progress/${course.id}/${i + 1}`}
-                    >
-                      *
-                    </Link>
                   </div>
                 </div>
               </div>
