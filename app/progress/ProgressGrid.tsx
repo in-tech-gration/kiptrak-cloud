@@ -5,12 +5,12 @@ import React, { useState } from "react";
 import { redirect } from "next/navigation";
 import { Course } from "@/utils/supabase/types";
 import CourseGrid from "@/components/CoursesGrid";
-import { useSession } from "@supabase/auth-helpers-react";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 
 export default function ProgressGrid() {
-  const session = useSession();
+  const { session, isLoading } = useSessionContext();
 
-  if (!session?.user) {
+  if (!isLoading && !session?.user) {
     redirect("/login");
   }
 

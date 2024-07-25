@@ -1,12 +1,14 @@
 "use client";
 
-import { useSession } from "@supabase/auth-helpers-react";
 import Link from "next/link";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 
 export default function Welcome() {
-  const session = useSession();
+  const { session, isLoading } = useSessionContext();
 
-  return (
+  return isLoading ? (
+    <></>
+  ) : (
     <div className="flex flex-col gap-16 items-center">
       <h1 className="font-bold text-4xl">
         Welcome to <span className="text-gray-400">Kip</span>

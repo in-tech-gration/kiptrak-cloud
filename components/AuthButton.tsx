@@ -2,10 +2,14 @@
 
 import Link from "next/link";
 import { SignOutButton } from "./SignOutButton";
-import { useSession } from "@supabase/auth-helpers-react";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 
 export default function AuthButton() {
-  const session = useSession();
+  const { session, isLoading } = useSessionContext();
+
+  if (isLoading) {
+    return <></>;
+  }
 
   return session?.user ? (
     <div className="flex items-center gap-4">
