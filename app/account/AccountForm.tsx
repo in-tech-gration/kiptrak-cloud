@@ -9,6 +9,10 @@ import { useSessionContext } from "@supabase/auth-helpers-react";
 export default function AccountForm() {
   const { session, isLoading: sessionLoading } = useSessionContext();
 
+  if (sessionLoading) {
+    return <></>;
+  }
+
   if (!sessionLoading && !session?.user) {
     redirect("/login");
   }
@@ -85,51 +89,58 @@ export default function AccountForm() {
   }
 
   return (
-    <div className="p-3 text-center">
-      <div>
-        <label htmlFor="email">Email</label>
-        <input id="email" type="text" value={session?.user.email} disabled />
+    <>
+      <h2 className="text-center font-bold text-3xl p-2">Account Details</h2>
+      <div className="p-3 text-center flex justify-evenly">
+        <div className="flex flex-col justify-center gap-1">
+          <label htmlFor="email">Email</label>
+          <input
+            className="text-black mx-4 text-center"
+            id="email"
+            type="text"
+            value={session?.user.email}
+            disabled
+          />
+          <label htmlFor="fullName">Full Name</label>
+          <input
+            className="text-black mx-4 text-center"
+            id="fullName"
+            type="text"
+            value={fullname || ""}
+            onChange={(e) => setFullname(e.target.value)}
+          />
+          <label htmlFor="username">Username</label>
+          <input
+            className="text-black mx-4 text-center"
+            id="username"
+            type="text"
+            value={username || ""}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <label htmlFor="website">Website</label>
+          <input
+            className="text-black mx-4 text-center"
+            id="website"
+            type="url"
+            value={website || ""}
+            onChange={(e) => setWebsite(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col gap-2 items-center">
+          <Avatar
+            uid={session?.user.id ?? null}
+            url={avatar_url}
+            size={150}
+            onUpload={(url) => {
+              setAvatarUrl(url);
+              updateProfile({ fullname, username, website, avatar_url: url });
+            }}
+          />
+        </div>
       </div>
-      <div>
-        <label htmlFor="fullName">Full Name</label>
-        <input
-          id="fullName"
-          type="text"
-          value={fullname || ""}
-          onChange={(e) => setFullname(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="username">Username</label>
-        <input
-          id="username"
-          type="text"
-          value={username || ""}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="website">Website</label>
-        <input
-          id="website"
-          type="url"
-          value={website || ""}
-          onChange={(e) => setWebsite(e.target.value)}
-        />
-      </div>
-      <Avatar
-        uid={session?.user.id ?? null}
-        url={avatar_url}
-        size={150}
-        onUpload={(url) => {
-          setAvatarUrl(url);
-          updateProfile({ fullname, username, website, avatar_url: url });
-        }}
-      />
-
-      <div>
+      <div className="flex flex-col items-center mt-10">
         <button
-          className="button primary block"
+          className="p-2 rounded font-bold bg-green-500 hover:bg-green-700"
           onClick={() =>
             updateProfile({ fullname, username, website, avatar_url })
           }
@@ -138,14 +149,6 @@ export default function AccountForm() {
           {loading ? "Loading ..." : "Update"}
         </button>
       </div>
-
-      <div>
-        <form action="/auth/signout" method="post">
-          <button className="button block" type="submit">
-            Sign out
-          </button>
-        </form>
-      </div>
-    </div>
+    </>
   );
 }

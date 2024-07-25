@@ -10,6 +10,10 @@ import { useEnrolledCoursesQuery } from "@/hooks/useEnrolledCoursesQuery";
 export default function EnrolledCourses() {
   const { session, isLoading: sessionLoading } = useSessionContext();
 
+  if (sessionLoading) {
+    return <></>;
+  }
+
   if (!sessionLoading && !session?.user) {
     redirect("/login");
   }
