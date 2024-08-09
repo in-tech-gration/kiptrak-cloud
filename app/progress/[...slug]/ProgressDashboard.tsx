@@ -2,6 +2,7 @@
 
 import React from "react";
 import { parseProgressParams } from "@/lib/parsers";
+import { RotatingLines } from "react-loader-spinner";
 import { redirect, useParams } from "next/navigation";
 import { useCourseQuery } from "@/hooks/useCourseQuery";
 import { useSessionContext } from "@supabase/auth-helpers-react";
@@ -31,7 +32,7 @@ export default function ProgressDashboard() {
   let content;
 
   if (isLoading) {
-    content = <div>Loading...</div>;
+    content = <RotatingLines width="50" />;
   } else if (isError || !course) {
     content = (
       <div className="flex-1 w-full flex flex-col gap-20 justify-center items-center">

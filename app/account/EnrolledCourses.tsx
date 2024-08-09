@@ -2,6 +2,7 @@
 
 import React from "react";
 import { redirect } from "next/navigation";
+import { RotatingLines } from "react-loader-spinner";
 import { useCoursesQuery } from "@/hooks/useCoursesQuery";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { enrollCourseMutation } from "@/hooks/enrollCourseMutation";
@@ -11,7 +12,7 @@ export default function EnrolledCourses() {
   const { session, isLoading: sessionLoading } = useSessionContext();
 
   if (sessionLoading) {
-    return <></>;
+    return <RotatingLines width="50" />;
   }
 
   if (!sessionLoading && !session?.user) {
@@ -45,7 +46,7 @@ export default function EnrolledCourses() {
   return (
     <div className="flex flex-col justify-center">
       {enrolledIsLoading ? (
-        <div>Loading....</div>
+        <RotatingLines width="50" />
       ) : enrolledIsError || !enrolledCourses ? (
         <div>Supabase Error</div>
       ) : (
@@ -69,7 +70,7 @@ export default function EnrolledCourses() {
         </div>
       )}
       {coursesIsLoading ? (
-        <div>Loading....</div>
+        <RotatingLines width="50" />
       ) : coursesIsError || !totalCourses ? (
         <div>Supabase Error</div>
       ) : (

@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { RotatingLines } from "react-loader-spinner";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 
 export default function Welcome() {
-
   const { session, isLoading, error } = useSessionContext();
 
   return (
@@ -19,44 +19,30 @@ export default function Welcome() {
       <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8" />
 
       {isLoading ? (
-
-        // TODO: Enhance loading screen with animation: 
-        <div>Loading...</div>
-
-      ) : (
-
-        // TODO: Create a Logged-in User Page:
-        session?.user ? (
-          <h2>
-            Don't waste any more time and hop on to the{" "}
-            <Link href="/progress" className="font-bold hover:underline">
-              <span className="text-gray-400">Progress</span>{" "}
-              <span className="text-green-500">Dashboard</span>
-            </Link>
-          </h2>
-        ) : error ? (
-
-          // @ts-ignore
-          <div>Error {console.log(error)}</div>
-
-        ) : (
-
-          // TODO: Create a Login Page:
-          <h2>
-            Please{" "}
-            <Link href="/login" className="font-bold hover:underline">
-              Login
-            </Link>{" "}
-            in order to access your{" "}
+        <RotatingLines width="50" />
+      ) : // TODO: Create a Logged-in User Page:
+      session?.user ? (
+        <h2>
+          Don't waste any more time and hop on to the{" "}
+          <Link href="/progress" className="font-bold hover:underline">
             <span className="text-gray-400">Progress</span>{" "}
             <span className="text-green-500">Dashboard</span>
-          </h2>
-
-        )
-
+          </Link>
+        </h2>
+      ) : error ? (
+        <div>Error {error.name}</div>
+      ) : (
+        // TODO: Create a Login Page:
+        <h2>
+          Please{" "}
+          <Link href="/login" className="font-bold hover:underline">
+            Login
+          </Link>{" "}
+          in order to access your{" "}
+          <span className="text-gray-400">Progress</span>{" "}
+          <span className="text-green-500">Dashboard</span>
+        </h2>
       )}
-
-
     </div>
-  )
+  );
 }

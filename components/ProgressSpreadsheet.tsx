@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import "react-datasheet-grid/dist/style.css";
 import { Progress } from "@/utils/supabase/types";
+import { RotatingLines } from "react-loader-spinner";
 import { useProgressQuery } from "@/hooks/useProgressQuery";
 import { useProgressUpdate } from "@/hooks/useProgressUpdate";
 import { SelectComponent, SelectOptions } from "./SelectComponent";
@@ -111,7 +112,7 @@ export const ProgressSpreadsheet = (props: ProgressSpreadsheetProps) => {
   let content;
 
   if (isLoading) {
-    content = <div>Loading...</div>;
+    content = <RotatingLines width="50" />;
   } else if (isError) {
     content = <div>{error.message}</div>;
   } else {
