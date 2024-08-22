@@ -19,7 +19,10 @@ export default function Welcome() {
       <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8" />
 
       {isLoading ? (
-        <RotatingLines width="50" />
+        <>
+          <RotatingLines width="50" />
+          <p className="italic text-lime-500">(If the loading persists for more than a minute or two, please contact a member of the staff)</p>
+        </>
       ) : // TODO: Create a Logged-in User Page:
       session?.user ? (
         <h2>
