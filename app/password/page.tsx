@@ -13,6 +13,8 @@ export default function EnrolledCourses() {
   const { session, isLoading: sessionLoading, error } = useSessionContext();
   const supabase = useSupabase();
 
+  console.log({ session, error });
+
   if (sessionLoading) {
     return <RotatingLines width="50" />;
   }
