@@ -8,7 +8,7 @@ import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useSupabase } from "@/hooks/useSupabase";
 import { SubmitButton } from "../login/submit-button";
 
-export default function EnrolledCourses() {
+export default function Password() {
 
   const { session, isLoading: sessionLoading, error } = useSessionContext();
   const supabase = useSupabase();
@@ -33,10 +33,15 @@ export default function EnrolledCourses() {
     });
 
     if ( data ){
-      return toast.success("Password updated successfully!");
+      toast.success("Password updated successfully!");
     }
-    toast.error("Ops! Something went wrong.");
-    console.log({ error });
+
+    if (error) {
+      toast.error("Ops! Something went wrong.");
+      console.log({ error });
+    }
+
+    return;
   }
 
   return (
