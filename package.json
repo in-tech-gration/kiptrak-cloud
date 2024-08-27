@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@supabase/auth-helpers-react": "^0.5.0",
@@ -31,6 +32,11 @@
     "@types/react-dom": "18.2.18",
     "@types/react-select": "^5.0.1",
     "encoding": "^0.1.13",
+    "husky": "^9.1.5",
+    "lint-staged": "^15.2.9",
     "prettier": "^3.3.3"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,css,md}": "prettier --write"
   }
 }
