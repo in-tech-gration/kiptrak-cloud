@@ -2,34 +2,40 @@
 
 import Link from "next/link";
 import { toast } from "react-hot-toast";
-import { redirect } from "next/navigation";
-import { SubmitButton } from "./submit-button";
 import { useSupabase } from "@/hooks/useSupabase";
+import { SubmitButton } from "@/app/login/submit-button";
 
-export default function Login() {
+export default function PasswordReset() {
   const supabase = useSupabase();
 
-  const signIn = async (formData: FormData) => {
+  async function resetPassword(formData: FormData) {
     const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email);
 
-    if (error) {
-      toast.error("Could not authenticate user.");
-      console.log(`Could not authenticate user: ${error.message}`);
-      return redirect("/login");
+    if (data) {
+      toast.success("Reset password email has been sent!");
     }
 
-    return redirect("/");
-  };
+    if (error) {
+      toast.error("Ops! Something went wrong.");
+      console.log({ error });
+    }
+
+    return;
+  }
 
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
       <form className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground">
+        <div className="mb-10">
+          <h1 className="text-3xl text-center font-bold text-green-500">
+            Forgot your password?
+          </h1>
+          <h3 className="text-sm text-center text-gray-400">
+            Please enter the email you use to sign in to KipTrak Cloud
+          </h3>
+        </div>
         <label className="text-md" htmlFor="email">
           Email
         </label>
@@ -39,25 +45,15 @@ export default function Login() {
           placeholder="you@example.com"
           required
         />
-        <label className="text-md" htmlFor="password">
-          Password
-        </label>
-        <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
-          type="password"
-          name="password"
-          placeholder="••••••••"
-          required
-        />
         <SubmitButton
-          formAction={signIn}
+          formAction={resetPassword}
           className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2"
-          pendingText="Signing In..."
+          pendingText="Sending request..."
         >
-          Sign In
+          Request password reset
         </SubmitButton>
         <Link
-          href="/"
+          href="/login"
           className="py-2 px-4 rounded-md text-foreground bg-btn-background hover:bg-btn-background-hover flex justify-center items-center group text-sm"
         >
           <svg
@@ -75,13 +71,6 @@ export default function Login() {
             <polyline points="15 18 9 12 15 6" />
           </svg>{" "}
           Back
-        </Link>
-        <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8" />
-        <Link
-          href="/password/reset"
-          className="flex justify-center text-blue-600 hover:underline"
-        >
-          Forgotten your password?
         </Link>
       </form>
     </div>
