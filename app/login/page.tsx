@@ -76,6 +76,13 @@ export default function Login() {
           </svg>{" "}
           Back
         </Link>
+        <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8" />
+        <Link
+          href="/password/reset"
+          className="flex justify-center text-blue-600 hover:underline"
+        >
+          Forgotten your password?
+        </Link>
       </form>
     </div>
   );
