@@ -16,7 +16,6 @@ import { Progress } from "@/utils/supabase/types";
 import { RotatingLines } from "react-loader-spinner";
 import { useProgressQuery } from "@/hooks/useProgressQuery";
 import { useProgressUpdate } from "@/hooks/useProgressUpdate";
-import { SelectComponent, SelectOptions } from "./SelectComponent";
 
 type ProgressSpreadsheetProps = {
   userId: string;
@@ -43,23 +42,6 @@ export const ProgressSpreadsheet = (props: ProgressSpreadsheetProps) => {
     }
   }, [data]);
 
-  const selectColumn = (
-    options: SelectOptions
-  ): Column<string | null, SelectOptions> => ({
-    // TODO: TypeScript
-    // @ts-expect-error: Take care of this:
-    component: SelectComponent,
-    columnData: options,
-    disableKeys: true,
-    keepFocus: true,
-    disabled: options.disabled,
-    deleteValue: () => null,
-    copyValue: ({ rowData }) =>
-      options.choices.find((choice) => choice.value === rowData)?.label ?? null,
-    pasteValue: ({ value }) =>
-      options.choices.find((choice) => choice.label === value)?.value ?? null,
-  });
-
   const columns = [
     {
       ...keyColumn("concept", textColumn),
@@ -73,16 +55,7 @@ export const ProgressSpreadsheet = (props: ProgressSpreadsheetProps) => {
       grow: 2.5,
     },
     {
-      ...keyColumn(
-        "level",
-        selectColumn({
-          choices: [
-            { value: "Beginner", label: "Beginner" },
-            { value: "Intermediate", label: "Intermediate" },
-            { value: "Advanced", label: "Advanced" },
-          ],
-        })
-      ),
+      ...keyColumn("level", textColumn),
       title: "Level",
       disabled: true,
       grow: 0.5,
