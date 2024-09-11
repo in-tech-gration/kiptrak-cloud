@@ -9,6 +9,7 @@ import {
   keyColumn,
   Column,
 } from "react-datasheet-grid";
+import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import "react-datasheet-grid/dist/style.css";
 import { Progress } from "@/utils/supabase/types";
@@ -106,7 +107,19 @@ export const ProgressSpreadsheet = (props: ProgressSpreadsheetProps) => {
 
   const updateButtonHidden = data === progress;
   const handleSpreadsheetUpdate = () => {
-    mutation.mutate(progress);
+    let valid = true;
+    progress.forEach((prog) => {
+      if (prog.confidence < 0 || prog.confidence > 10) {
+        valid = false;
+        toast.error(
+          "Confidence should be between 0 and 10. Please provide correct information."
+        );
+        return;
+      }
+    });
+    if (valid) {
+      mutation.mutate(progress);
+    }
   };
 
   let content;
