@@ -4,10 +4,19 @@ import Link from "next/link";
 import { toast } from "react-hot-toast";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "./submit-button";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useSupabase } from "@/hooks/useSupabase";
+import { RotatingLines } from "react-loader-spinner";
 
 export default function Login() {
   const supabase = useSupabase();
+  const { session, isLoading: sessionLoading } = useSessionContext();
+  if (sessionLoading) {
+    return <RotatingLines width="50" />;
+  }
+  if (!sessionLoading && session?.user) {
+    redirect("/progress");
+  }
 
   const signIn = async (formData: FormData) => {
     const email = formData.get("email") as string;
