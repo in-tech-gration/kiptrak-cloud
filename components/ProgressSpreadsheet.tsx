@@ -22,10 +22,11 @@ type ProgressSpreadsheetProps = {
   courseId: string;
   week?: number;
   day?: number;
+  admin?: boolean;
 };
 
 export const ProgressSpreadsheet = (props: ProgressSpreadsheetProps) => {
-  const { userId, courseId, week, day } = props;
+  const { userId, courseId, week, day, admin } = props;
   const [progress, setProgress] = useState<Progress[]>([]);
   const { data, isLoading, isError, error } = useProgressQuery(
     userId,
@@ -62,23 +63,25 @@ export const ProgressSpreadsheet = (props: ProgressSpreadsheetProps) => {
     },
     {
       ...keyColumn("instructions", textColumn),
-      disbled: true,
+      disabled: admin,
       title: "Instructions",
       grow: 3,
     },
     {
       ...keyColumn("confidence", intColumn),
+      disabled: admin,
       title: "Confidence",
       grow: 0.5,
     },
     {
       ...keyColumn("completed", checkboxColumn),
+      disabled: admin,
       title: "Completed",
       grow: 0.5,
     },
   ];
 
-  const updateButtonHidden = data === progress;
+  const updateButtonHidden = admin || data === progress;
   const handleSpreadsheetUpdate = () => {
     let valid = true;
     progress.forEach((prog) => {
