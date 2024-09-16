@@ -79,6 +79,7 @@ export type Database = {
           course: string | null;
           created_at: string;
           day: number;
+          draft_id: string | null;
           id: string;
           instructions: string;
           level: Database["public"]["Enums"]["level"];
@@ -93,6 +94,7 @@ export type Database = {
           course?: string | null;
           created_at?: string;
           day?: number;
+          draft_id?: string | null;
           id?: string;
           instructions?: string;
           level?: Database["public"]["Enums"]["level"];
@@ -107,6 +109,7 @@ export type Database = {
           course?: string | null;
           created_at?: string;
           day?: number;
+          draft_id?: string | null;
           id?: string;
           instructions?: string;
           level?: Database["public"]["Enums"]["level"];
@@ -120,6 +123,13 @@ export type Database = {
             columns: ["course"];
             isOneToOne: false;
             referencedRelation: "courses";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "progress_draft_id_fkey";
+            columns: ["draft_id"];
+            isOneToOne: false;
+            referencedRelation: "progress_draft";
             referencedColumns: ["id"];
           },
           {
@@ -214,11 +224,67 @@ export type Database = {
           },
         ];
       };
+      role_permissions: {
+        Row: {
+          id: number;
+          permission: Database["public"]["Enums"]["app_permission"];
+          role: Database["public"]["Enums"]["app_role"];
+        };
+        Insert: {
+          id?: number;
+          permission: Database["public"]["Enums"]["app_permission"];
+          role: Database["public"]["Enums"]["app_role"];
+        };
+        Update: {
+          id?: number;
+          permission?: Database["public"]["Enums"]["app_permission"];
+          role?: Database["public"]["Enums"]["app_role"];
+        };
+        Relationships: [];
+      };
+      user_roles: {
+        Row: {
+          id: number;
+          role: Database["public"]["Enums"]["app_role"];
+          user_id: string;
+        };
+        Insert: {
+          id?: number;
+          role: Database["public"]["Enums"]["app_role"];
+          user_id: string;
+        };
+        Update: {
+          id?: number;
+          role?: Database["public"]["Enums"]["app_role"];
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: {
       [_ in never]: never;
     };
     Functions: {
+      authorize: {
+        Args: {
+          requested_permission: Database["public"]["Enums"]["app_permission"];
+        };
+        Returns: boolean;
+      };
+      custom_access_token_hook: {
+        Args: {
+          event: Json;
+        };
+        Returns: Json;
+      };
       handle_enroll_course: {
         Args: {
           course_name: string;
@@ -228,6 +294,12 @@ export type Database = {
       };
     };
     Enums: {
+      app_permission:
+        | "progress.select"
+        | "progress_draft.update"
+        | "progress.update"
+        | "rel_profile_courses.select";
+      app_role: "admin";
       level: "Beginner" | "Intermediate" | "Advanced";
     };
     CompositeTypes: {
@@ -320,6 +392,17 @@ export type Enums<
 
 // Schema: public
 // Enums
+export enum AppPermission {
+  progressSelect = "progress.select",
+  progress_draftUpdate = "progress_draft.update",
+  progressUpdate = "progress.update",
+  rel_profile_coursesSelect = "rel_profile_courses.select",
+}
+
+export enum AppRole {
+  admin = "admin",
+}
+
 export enum Level {
   Beginner = "Beginner",
   Intermediate = "Intermediate",
@@ -353,7 +436,30 @@ export type InsertRelProfileCourse =
 export type UpdateRelProfileCourse =
   Database["public"]["Tables"]["rel_profiles_courses"]["Update"];
 
+export type RolePermission =
+  Database["public"]["Tables"]["role_permissions"]["Row"];
+export type InsertRolePermission =
+  Database["public"]["Tables"]["role_permissions"]["Insert"];
+export type UpdateRolePermission =
+  Database["public"]["Tables"]["role_permissions"]["Update"];
+
+export type UserRole = Database["public"]["Tables"]["user_roles"]["Row"];
+export type InsertUserRole =
+  Database["public"]["Tables"]["user_roles"]["Insert"];
+export type UpdateUserRole =
+  Database["public"]["Tables"]["user_roles"]["Update"];
+
 // Functions
+export type ArgsAuthorize =
+  Database["public"]["Functions"]["authorize"]["Args"];
+export type ReturnTypeAuthorize =
+  Database["public"]["Functions"]["authorize"]["Returns"];
+
+export type ArgsCustomAccessTokenHook =
+  Database["public"]["Functions"]["custom_access_token_hook"]["Args"];
+export type ReturnTypeCustomAccessTokenHook =
+  Database["public"]["Functions"]["custom_access_token_hook"]["Returns"];
+
 export type ArgsHandleEnrollCourse =
   Database["public"]["Functions"]["handle_enroll_course"]["Args"];
 export type ReturnTypeHandleEnrollCourse =
