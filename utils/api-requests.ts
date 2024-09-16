@@ -7,6 +7,7 @@ import {
   Course,
   RelProfileCourse,
   ReturnTypeHandleEnrollCourse,
+  Profile,
 } from "./supabase/types";
 
 export const getProgressDraft = async (
@@ -78,12 +79,14 @@ export const getProgress = async (
       .select()
       .eq("user_id", userId)
       .eq("course", courseId)
-      .eq("week", week)) as { data: Progress[]; error: PostgrestError | null };
+      .eq("week", week)
+      .order("day")) as { data: Progress[]; error: PostgrestError | null };
 
     if (error) {
       toast.error(error.message);
       throw error;
     }
+    console.log(progress);
 
     return progress;
   } else {
@@ -190,4 +193,23 @@ export const addEnrolledCourse = async (
   }
   console.log(data);
   return enrolledCourses;
+};
+
+export const getEnrolledUsers = async (
+  client: TypedSupabaseClient,
+  courseId: string
+) => {
+  const { data, error } = await client
+    .from("rel_profiles_courses")
+    .select("profiles (id, full_name)")
+    .eq("course_id", courseId);
+
+  if (error) {
+    toast.error(error.message);
+    throw error;
+  }
+
+  const enrolledUsers = data?.map((d) => d.profiles) as Partial<Profile>[];
+
+  return enrolledUsers;
 };
