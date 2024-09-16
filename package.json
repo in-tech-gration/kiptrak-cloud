@@ -13,6 +13,7 @@
     "autoprefixer": "10.4.17",
     "better-supabase-types": "^2.7.5",
     "geist": "^1.2.1",
+    "jwt-decode": "^4.0.0",
     "next": "latest",
     "postcss": "8.4.33",
     "react": "18.2.0",
