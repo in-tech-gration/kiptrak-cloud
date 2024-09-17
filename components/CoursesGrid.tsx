@@ -1,16 +1,10 @@
 "use client";
 
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import { useCoursesQuery } from "@/hooks/useCoursesQuery";
-import { Course } from "@/utils/supabase/types";
+import Link from "next/link";
 
-type CourseListProps = {
-  course?: Course;
-  setCourse: Dispatch<SetStateAction<Course | undefined>>;
-};
-
-export default function CoursesGrid(props: CourseListProps) {
-  const { course, setCourse } = props;
+export default function CoursesGrid() {
   const { data: courses, isError, isLoading } = useCoursesQuery();
 
   if (isLoading) {
@@ -28,14 +22,14 @@ export default function CoursesGrid(props: CourseListProps) {
       </h2>
       <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-4 place-items-center">
         {courses?.map((c, index) => (
-          <button
+          <Link
+            href={`/progress/${c.id}`}
             key={`course-button-${index}`}
-            className={`grid gap-2 bg-white border-4 text-green-500 rounded p-2 place-items-center hover:border-green-500 ${course && course.name == c.name && "border-green-500"}`}
-            onClick={() => setCourse(c)}
+            className={`grid gap-2 bg-white border-4 text-green-500 rounded p-2 place-items-center hover:border-green-500`}
           >
             <div>{c.name}</div>
             <div>{c.length} weeks</div>
-          </button>
+          </Link>
         ))}
       </div>
     </>
