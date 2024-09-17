@@ -2,6 +2,7 @@
 
 import React from "react";
 import { parseProgressParams } from "@/lib/parsers";
+import ProgressGrid from "@/components/ProgressGrid";
 import { RotatingLines } from "react-loader-spinner";
 import { redirect, useParams } from "next/navigation";
 import { useCourseQuery } from "@/hooks/useCourseQuery";
@@ -19,7 +20,7 @@ export default function ProgressDashboard() {
     useParams<{ slug: string[] }>().slug
   );
 
-  if (!courseId || !week) {
+  if (!courseId) {
     return (
       <div className="flex-1 w-full flex flex-col gap-20 justify-center items-center">
         <h1 className="font-bold text-4xl text-red-500">Error 404 Here</h1>
@@ -27,7 +28,12 @@ export default function ProgressDashboard() {
     );
   }
 
-  const { data: course, isLoading, isError, error } = useCourseQuery(courseId);
+  const {
+    data: course,
+    isLoading,
+    isError,
+    error,
+  } = useCourseQuery(courseId as string);
 
   let content;
 
@@ -41,6 +47,8 @@ export default function ProgressDashboard() {
         </h1>
       </div>
     );
+  } else if (course && !week && !day) {
+    content = <ProgressGrid course={course} />;
   } else {
     content = (
       <div className="flex-1 w-full flex flex-col gap-20 justify-center items-center">
