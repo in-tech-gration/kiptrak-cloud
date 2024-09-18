@@ -63,19 +63,60 @@ export const ProgressSpreadsheet = (props: ProgressSpreadsheetProps) => {
     },
     {
       ...keyColumn("instructions", textColumn),
-      disabled: admin,
       title: "Instructions",
       grow: 3,
     },
     {
       ...keyColumn("confidence", intColumn),
-      disabled: admin,
       title: "Confidence",
       grow: 0.5,
     },
     {
       ...keyColumn("completed", checkboxColumn),
-      disabled: admin,
+      title: "Completed",
+      grow: 0.5,
+    },
+  ];
+
+  const adminColumnns = [
+    {
+      ...keyColumn("day", intColumn),
+      disabled: true,
+      title: "Day",
+      grow: 0.2,
+    },
+    {
+      ...keyColumn("concept", textColumn),
+      disabled: true,
+      title: "Concept",
+    },
+    {
+      ...keyColumn("task", textColumn),
+      disabled: true,
+      title: "Task",
+      grow: 2.5,
+    },
+    {
+      ...keyColumn("level", textColumn),
+      title: "Level",
+      disabled: true,
+      grow: 0.5,
+    },
+    {
+      ...keyColumn("instructions", textColumn),
+      disabled: true,
+      title: "Instructions",
+      grow: 3,
+    },
+    {
+      ...keyColumn("confidence", intColumn),
+      disabled: true,
+      title: "Confidence",
+      grow: 0.5,
+    },
+    {
+      ...keyColumn("completed", checkboxColumn),
+      disabled: true,
       title: "Completed",
       grow: 0.5,
     },
@@ -113,7 +154,11 @@ export const ProgressSpreadsheet = (props: ProgressSpreadsheetProps) => {
           onChange={(value) => {
             setProgress(value);
           }}
-          columns={columns as Column<Progress>[]}
+          columns={
+            admin
+              ? (adminColumnns as Column<Progress>[])
+              : (columns as Column<Progress>[])
+          }
         />
         {!updateButtonHidden && (
           <button
