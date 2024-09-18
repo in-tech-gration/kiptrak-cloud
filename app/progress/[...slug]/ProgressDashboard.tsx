@@ -47,8 +47,8 @@ export default function ProgressDashboard() {
         </h1>
       </div>
     );
-  } else if (course && !week && !day) {
-    content = <ProgressGrid course={course} />;
+  } else if (course && !week && !day && session?.user.id) {
+    content = <ProgressGrid userId={session.user.id} course={course} />;
   } else {
     content = (
       <div className="flex-1 w-full flex flex-col gap-20 justify-center items-center">
