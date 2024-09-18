@@ -9,6 +9,7 @@ import {
   ReturnTypeHandleEnrollCourse,
   Profile,
 } from "./supabase/types";
+import { WeeklyProgress } from "@/lib/types";
 
 export const getProgressDraft = async (
   client: TypedSupabaseClient,
@@ -86,7 +87,6 @@ export const getProgress = async (
       toast.error(error.message);
       throw error;
     }
-    console.log(progress);
 
     return progress;
   } else {
@@ -212,4 +212,42 @@ export const getEnrolledUsers = async (
   const enrolledUsers = data?.map((d) => d.profiles) as Partial<Profile>[];
 
   return enrolledUsers;
+};
+
+export const getUserWeeklyProgress = async (
+  client: TypedSupabaseClient,
+  userId: string
+) => {
+  const { data, error } = await client
+    .from("progress")
+    .select("week, day, completed")
+    .eq("user_id", userId)
+    .order("week, day");
+
+  if (error) {
+    toast.error(error.message);
+    throw error;
+  }
+
+  // Assigned acc to any to avoid stupid TS errors.
+  const result = data.reduce((acc: any, row) => {
+    const key = `${row.week}-${row.day}`;
+    if (!acc[key]) {
+      acc[key] = {
+        week: row.week,
+        day: row.day,
+        completedTasks: 0,
+        totalTasks: 0,
+      };
+    }
+    acc[key].totalTasks += 1;
+    if (row.completed) {
+      acc[key].completedTasks += 1;
+    }
+    return acc;
+  }, {});
+
+  const weeklyProgress = Object.values(result) as WeeklyProgress[];
+
+  return weeklyProgress;
 };
