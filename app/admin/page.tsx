@@ -70,7 +70,7 @@ export default function Admin() {
       <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-4 place-items-center">
         {enrolledUsers?.map((u, index) => (
           <button
-            key={`course-button-${index}`}
+            key={`user-button-${index}`}
             className={`grid gap-2 bg-white border-4 text-green-500 rounded p-2 place-items-center hover:border-green-500 ${user && user.full_name == u.full_name && "border-green-500"}`}
             onClick={() => setUser(u)}
           >
@@ -84,10 +84,13 @@ export default function Admin() {
           <select
             className="border border-green-500 text-green-500 text-sm text-center rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
             onChange={(e) => setWeek(parseInt(e.target.value))}
+            defaultValue={" "}
           >
-            <option selected />
+            <option />
             {[...Array(36)].map((_, w) => (
-              <option value={w + 1}>{w + 1}</option>
+              <option key={`week-option-${w + 1}`} value={w + 1}>
+                {w + 1}
+              </option>
             ))}
           </select>
         </label>
