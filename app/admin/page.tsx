@@ -48,70 +48,60 @@ export default function Admin() {
     );
   }
 
-  let content;
-
   if (isLoading) {
-    content = <RotatingLines width="50" />;
-  } else if (isError) {
-    content = (
+    return <RotatingLines width="50" />;
+  }
+
+  if (isError) {
+    return (
       <div className="flex-1 w-full flex flex-col gap-20 justify-center items-center">
         <h1 className="font-bold text-4xl text-red-500">
           Supabase Error: ${error?.message}
         </h1>
       </div>
     );
-  } else {
-    content = (
-      <>
-        <h2 className="text-center font-bold text-3xl p-2 text-gray-400">
-          Enrolled Users
-        </h2>
-        <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-4 place-items-center">
-          {enrolledUsers?.map((u, index) => (
-            <button
-              key={`course-button-${index}`}
-              className={`grid gap-2 bg-white border-4 text-green-500 rounded p-2 place-items-center hover:border-green-500 ${user && user.full_name == u.full_name && "border-green-500"}`}
-              onClick={() => setUser(u)}
-            >
-              <div>{u.full_name}</div>
-            </button>
-          ))}
-        </div>
-        {user && (
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            Select a week:
-            <select
-              className="border border-green-500 text-green-500 text-sm text-center rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
-              onChange={(e) => setWeek(parseInt(e.target.value))}
-            >
-              <option selected />
-              {[...Array(36)].map((_, w) => (
-                <option value={w + 1}>{w + 1}</option>
-              ))}
-            </select>
-          </label>
-        )}
-        {user && week && (
-          <div style={{ width: "90%" }}>
-            <ProgressSpreadsheet
-              admin
-              userId={user?.id as string}
-              courseId="wdx-180"
-              week={week}
-            />
-          </div>
-        )}
-      </>
-    );
   }
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-20 justify-center items-center">
-      <h1 className="font-bold text-4xl">
-        <span className="text-gray-400">Admin</span>{" "}
-        <span className="text-green-500">Dashboard</span>
-      </h1>
-      {content}
-    </div>
+    <>
+      <h2 className="text-center font-bold text-3xl p-2 text-gray-400">
+        Enrolled Users
+      </h2>
+      <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-4 place-items-center">
+        {enrolledUsers?.map((u, index) => (
+          <button
+            key={`course-button-${index}`}
+            className={`grid gap-2 bg-white border-4 text-green-500 rounded p-2 place-items-center hover:border-green-500 ${user && user.full_name == u.full_name && "border-green-500"}`}
+            onClick={() => setUser(u)}
+          >
+            <div>{u.full_name}</div>
+          </button>
+        ))}
+      </div>
+      {user && (
+        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          Select a week:
+          <select
+            className="border border-green-500 text-green-500 text-sm text-center rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5"
+            onChange={(e) => setWeek(parseInt(e.target.value))}
+          >
+            <option selected />
+            {[...Array(36)].map((_, w) => (
+              <option value={w + 1}>{w + 1}</option>
+            ))}
+          </select>
+        </label>
+      )}
+      {user && week && (
+        <div style={{ width: "90%" }}>
+          <ProgressSpreadsheet
+            admin
+            userId={user?.id as string}
+            courseId="wdx-180"
+            week={week}
+          />
+        </div>
+      )}
+    </>
   );
 }
