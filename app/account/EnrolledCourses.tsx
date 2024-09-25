@@ -49,7 +49,7 @@ export default function EnrolledCourses() {
         <RotatingLines width="50" />
       ) : enrolledIsError || !enrolledCourses ? (
         <div>Supabase Error</div>
-      ) : (
+      ) : enrolledCourses.length ? (
         <div>
           <h2 className="text-center font-bold text-3xl p-2">
             Enrolled Courses
@@ -68,13 +68,15 @@ export default function EnrolledCourses() {
             </div>
           ))}
         </div>
+      ) : (
+        <></>
       )}
       {coursesIsLoading ? (
         <RotatingLines width="50" />
       ) : coursesIsError || !totalCourses ? (
         <div>Supabase Error</div>
-      ) : (
-        <div className="border-t border-t-foreground/10">
+      ) : totalCourses.length !== enrolledCourses?.length ? (
+        <>
           <h2 className="text-center font-bold text-3xl p-2">
             Available Courses
           </h2>
@@ -110,7 +112,9 @@ export default function EnrolledCourses() {
               )}
             </div>
           ))}
-        </div>
+        </>
+      ) : (
+        <></>
       )}
     </div>
   );

@@ -17,7 +17,9 @@ export default function AuthButton() {
         href="/account"
         className="font-bold hover:border hover:rounded hover:border-green-500 hover:text-gray-400 p-3"
       >
-        {session.user.email}
+        {session.user.app_metadata.provider === "github"
+          ? session.user.user_metadata.user_name
+          : session.user.email}
       </Link>
       <SignOutButton />
     </div>
