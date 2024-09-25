@@ -147,6 +147,7 @@ export const getEnrolledCourses = async (
   client: TypedSupabaseClient,
   userId: string
 ) => {
+  if (!userId) return []; // return empty array if userId is undefined
   const { data, error } = await client
     .from("rel_profiles_courses")
     .select("courses (id, name)")
