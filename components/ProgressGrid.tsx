@@ -53,7 +53,7 @@ export default function ProgressGrid(props: ProgressGridProps) {
                   <Link
                     key={`week_${week + 1}_${day + 1}`}
                     className={`${colors[week][day]} text-white py-2 mx-1 rounded text-center h-10 w-10`}
-                    href={`/progress/${course.id}/${week + 1}/${day + 1}`}
+                    href={`/progress/${course.id}?week=${week + 1}&day=${day + 1}`}
                   >
                     {day + 1}
                   </Link>

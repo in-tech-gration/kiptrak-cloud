@@ -1,39 +1,25 @@
 "use client";
 
 import React from "react";
-import { parseProgressParams } from "@/lib/parsers";
 import ProgressGrid from "@/components/ProgressGrid";
 import { RotatingLines } from "react-loader-spinner";
-import { redirect, useParams } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { useCourseQuery } from "@/hooks/useCourseQuery";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { ProgressSpreadsheet } from "@/components/ProgressSpreadsheet";
 
-export default function ProgressDashboard() {
+export default function ProgressDashboard({ courseId }: { courseId: string }) {
   const { session, isLoading: sessionLoading } = useSessionContext();
+  const searchParams = useSearchParams();
 
   if (!sessionLoading && !session?.user) {
     redirect("/login");
   }
 
-  const { courseId, day, week } = parseProgressParams(
-    useParams<{ slug: string[] }>().slug
-  );
+  const day = searchParams.get("day");
+  const week = searchParams.get("week");
 
-  if (!courseId) {
-    return (
-      <div className="flex-1 w-full flex flex-col gap-20 justify-center items-center">
-        <h1 className="font-bold text-4xl text-red-500">Error 404 Here</h1>
-      </div>
-    );
-  }
-
-  const {
-    data: course,
-    isLoading,
-    isError,
-    error,
-  } = useCourseQuery(courseId as string);
+  const { data: course, isLoading, isError, error } = useCourseQuery(courseId);
 
   if (isLoading) {
     return <RotatingLines width="50" />;
@@ -70,11 +56,10 @@ export default function ProgressDashboard() {
         <ProgressSpreadsheet
           userId={session?.user.id as string}
           courseId={course.id}
-          week={week}
-          day={day}
+          week={week ? +week : undefined}
+          day={day ? +day : undefined}
         />
       </div>
-      {/* TODO: Add previous and next buttons for better user experience */}
     </div>
   );
 }
