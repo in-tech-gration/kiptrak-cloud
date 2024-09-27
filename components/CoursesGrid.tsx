@@ -20,12 +20,12 @@ export default function CoursesGrid({ baseUrl }: { baseUrl: string }) {
       <h2 className="text-center font-bold text-3xl p-2 text-gray-400">
         Available Courses
       </h2>
-      <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-4 place-items-center">
+      <div className="grid gap-4 place-items-center w-1/6">
         {courses?.map((c, index) => (
           <Link
             href={`${baseUrl}/${c.id}`}
             key={`course-button-${index}`}
-            className={`grid gap-2 bg-white border-4 text-green-500 rounded p-2 place-items-center hover:border-green-500`}
+            className={`grid gap-2 bg-gray-900 border-4 text-green-500 rounded p-2 place-items-center hover:border-green-500 w-full`}
           >
             <div>{c.name}</div>
             <div>{c.length} weeks</div>

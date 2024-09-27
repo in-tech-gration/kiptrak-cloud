@@ -46,7 +46,7 @@ export default function ProgressDashboard({ courseId }: { courseId: string }) {
   }
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-20 justify-center items-center">
+    <>
       <h1 className="font-bold text-4xl">
         <span className="text-gray-400">{course.name}'s</span>{" "}
         <span className="text-green-500">Progress</span>
@@ -66,6 +66,6 @@ export default function ProgressDashboard({ courseId }: { courseId: string }) {
           day={day ? +day : undefined}
         />
       </div>
-    </div>
+    </>
   );
 }

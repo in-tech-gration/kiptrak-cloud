@@ -11,7 +11,7 @@ export function generateStaticParams() {
 }
 
 function SuspenseFallback() {
-  return <>placeholder</>;
+  return <>Loading...</>;
 }
 
 export default function AdminCoursePage({
