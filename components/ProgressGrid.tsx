@@ -10,10 +10,11 @@ import { colorsForTaskCompletion } from "@/lib/utils";
 type ProgressGridProps = {
   userId: string;
   course: Course;
+  baseUrl: string;
 };
 
 export default function ProgressGrid(props: ProgressGridProps) {
-  const { userId, course } = props;
+  const { userId, course, baseUrl } = props;
 
   const { data, isLoading, error } = useWeeklyProgressQuery(userId);
 
@@ -30,6 +31,8 @@ export default function ProgressGrid(props: ProgressGridProps) {
       </div>
     );
   }
+
+  const userIdParam = baseUrl === "/admin" ? `userId=${userId}&` : "";
 
   const days = 5;
   const colors = data
@@ -53,7 +56,7 @@ export default function ProgressGrid(props: ProgressGridProps) {
                   <Link
                     key={`week_${week + 1}_${day + 1}`}
                     className={`${colors[week][day]} text-white py-2 mx-1 rounded text-center h-10 w-10`}
-                    href={`/progress/${course.id}?week=${week + 1}&day=${day + 1}`}
+                    href={`${baseUrl}/${course.id}?${userIdParam}week=${week + 1}&day=${day + 1}`}
                   >
                     {day + 1}
                   </Link>

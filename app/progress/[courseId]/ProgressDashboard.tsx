@@ -36,7 +36,13 @@ export default function ProgressDashboard({ courseId }: { courseId: string }) {
   }
 
   if (course && !week && !day && session?.user.id) {
-    return <ProgressGrid userId={session.user.id} course={course} />;
+    return (
+      <ProgressGrid
+        course={course}
+        baseUrl="/progress"
+        userId={session.user.id}
+      />
+    );
   }
 
   return (

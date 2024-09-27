@@ -4,7 +4,7 @@ import React from "react";
 import { useCoursesQuery } from "@/hooks/useCoursesQuery";
 import Link from "next/link";
 
-export default function CoursesGrid() {
+export default function CoursesGrid({ baseUrl }: { baseUrl: string }) {
   const { data: courses, isError, isLoading } = useCoursesQuery();
 
   if (isLoading) {
@@ -23,7 +23,7 @@ export default function CoursesGrid() {
       <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-4 place-items-center">
         {courses?.map((c, index) => (
           <Link
-            href={`/progress/${c.id}`}
+            href={`${baseUrl}/${c.id}`}
             key={`course-button-${index}`}
             className={`grid gap-2 bg-white border-4 text-green-500 rounded p-2 place-items-center hover:border-green-500`}
           >
