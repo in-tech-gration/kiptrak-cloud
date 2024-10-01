@@ -15,7 +15,7 @@ export default function Login() {
     return <RotatingLines width="50" />;
   }
   if (!sessionLoading && session?.user) {
-    redirect("/progress");
+    redirect("/");
   }
 
   const signIn = async (formData: FormData) => {
@@ -28,12 +28,9 @@ export default function Login() {
     });
 
     if (error) {
-      toast.error("Could not authenticate user.");
-      console.log(`Could not authenticate user: ${error.message}`);
-      return redirect("/login");
+      toast.error(error.message);
+      console.log(error);
     }
-
-    return redirect("/");
   };
 
   const signInWithGitHub = async () => {
@@ -42,12 +39,9 @@ export default function Login() {
     });
 
     if (error) {
-      toast.error("Could not sign in with GitHub.");
-      console.log(`Could not sign in with GitHub: ${error.message}`);
-      return redirect("/login");
+      toast.error(error.message);
+      console.log(error);
     }
-
-    return redirect("/");
   };
 
   return (
