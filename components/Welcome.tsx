@@ -7,6 +7,27 @@ import { useSessionContext } from "@supabase/auth-helpers-react";
 export default function Welcome() {
   const { session, isLoading, error } = useSessionContext();
 
+  if (isLoading) {
+    return (
+      <>
+        <RotatingLines width="50" />
+        <p className="italic text-lime-500">
+          (If the loading persists for more than a minute or two, please contact
+          a member of the staff)
+        </p>
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <p className="font-bold text-red-500">Error: {error.name}</p>
+        <p className="font-bold text-red-500">{error.message}</p>
+      </>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-16 items-center">
       <h1 className="font-bold text-4xl">
@@ -17,34 +38,25 @@ export default function Welcome() {
         The ideal tool to keep track of your progress
       </p>
       <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8" />
-
-      {isLoading ? (
+      {session?.user && (
         <>
-          <RotatingLines width="50" />
-          <p className="italic text-lime-500">(If the loading persists for more than a minute or two, please contact a member of the staff)</p>
-        </>
-      ) : // TODO: Create a Logged-in User Page:
-      session?.user ? (
-        <h2>
-          Don't waste any more time and hop on to the{" "}
-          <Link href="/progress" className="font-bold hover:underline">
-            <span className="text-gray-400">Progress</span>{" "}
-            <span className="text-green-500">Dashboard</span>
+          <h2 className="text-2xl">It's so nice to see you again!</h2>
+          <p className="text-xl">
+            Don't waste any more time and start keeping track of your progress!
+          </p>
+          <Link
+            href="/progress"
+            className="font-bold text-lg text-green-500 hover:text-green-700 border-4 rounded border-green-500 hover:border-green-700 p-3"
+          >
+            Progress Dashboard
           </Link>
-        </h2>
-      ) : error ? (
-        <div>Error {error.name}</div>
-      ) : (
-        // TODO: Create a Login Page:
-        <h2>
-          Please{" "}
-          <Link href="/login" className="font-bold hover:underline">
-            Login
-          </Link>{" "}
-          in order to access your{" "}
-          <span className="text-gray-400">Progress</span>{" "}
-          <span className="text-green-500">Dashboard</span>
-        </h2>
+          <p className="italic text-gray-400">
+            If you have not enrolled to any course, please visit your{" "}
+            <Link href="/account" className="text-green-300">
+              account page!
+            </Link>
+          </p>
+        </>
       )}
     </div>
   );
